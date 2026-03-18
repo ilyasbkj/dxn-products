@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iniciar Sesión | DXN Elegance</title>
+</head>
+<body>
+  <div class="container">
+    <nav class="navbar" style="justify-content: center; border-bottom: none; margin-bottom: 0;">
+      <a href="/" class="brand">DXN</a>
+    </nav>
+
+    <main class="auth-container glass-card">
+      <div class="auth-tabs">
+        <div class="auth-tab active" id="tab-login">Iniciar Sesión</div>
+        <div class="auth-tab" id="tab-register">Crear Cuenta</div>
+      </div>
+
+      <!-- Login Form -->
+      <form id="form-login">
+        <div class="form-group">
+          <label for="login-email">Correo Electrónico</label>
+          <input type="email" id="login-email" class="form-control" required />
+        </div>
+        <div class="form-group">
+          <label for="login-password">Contraseña</label>
+          <input type="password" id="login-password" class="form-control" required />
+        </div>
+        <div id="login-error" style="color: var(--danger); margin-bottom: 15px; display: none;"></div>
+        <button type="submit" class="btn btn-gold" style="width: 100%;">Entrar</button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="form-register" class="hidden">
+        <div class="form-group">
+          <label for="reg-email">Correo Electrónico</label>
+          <input type="email" id="reg-email" class="form-control" required />
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Contraseña (Mínimo 6 caracteres)</label>
+          <input type="password" id="reg-password" class="form-control" required minlength="6" />
+        </div>
+        <div id="reg-error" style="color: var(--danger); margin-bottom: 15px; display: none;"></div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Registrarme</button>
+      </form>
+    </main>
+  </div>
+
+  <script type="module" src="/src/js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Administración | DXN</title>
+</head>
+<body>
+  <div class="container">
+    <nav class="navbar">
+      <a href="/" class="brand">Admin DXN</a>
+      <div class="nav-links">
+        <a href="/">Ir al Catálogo</a>
+        <button id="admin-logout-btn" class="btn btn-danger">Cerrar Sesión</button>
+      </div>
+    </nav>
+
+    <main id="admin-content" style="display: none;">
+      <section class="glass-card mb-8">
+        <div class="admin-header">
+          <h2>Gestión de Productos</h2>
+          <button id="btn-show-form" class="btn btn-primary">+ Nuevo Producto</button>
+        </div>
+        
+        <div class="table-responsive">
+          <table id="products-table">
+            <thead>
+              <tr>
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Enlace</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="products-tbody">
+              <!-- Products injected automatically -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Formulario Agregar/Editar -->
+      <section id="form-container" class="glass-card hidden">
+        <h3 id="form-title" class="mb-4">Agregar Producto</h3>
+        <form id="product-form">
+          <input type="hidden" id="prod-id" />
+          
+          <div class="form-group">
+            <label for="prod-name">Nombre del Producto</label>
+            <input type="text" id="prod-name" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label for="prod-desc">Descripción Breve</label>
+            <textarea id="prod-desc" class="form-control" rows="3" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="prod-img">URL de Imagen (Opcional)</label>
+            <input type="url" id="prod-img" class="form-control" placeholder="https://ejemplo.com/imagen.jpg" />
+          </div>
+          <div class="form-group">
+            <label for="prod-link">Enlace de Compra o Afiliado</label>
+            <input type="url" id="prod-link" class="form-control" required placeholder="https://..." />
+          </div>
+          
+          <div style="display: flex; gap: 15px;">
+            <button type="submit" class="btn btn-primary">Guardar Producto</button>
+            <button type="button" id="btn-cancel" class="btn btn-danger" style="background: transparent; border: 1px solid var(--glass-border); color: white;">Cancelar</button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <div id="unauthorized-msg" class="text-center mt-4">
+      <p>Verificando permisos y sesión...</p>
+    </div>
+  </div>
+
+  <script type="module" src="/src/js/admin.js"></script>
+</body>
+</html>

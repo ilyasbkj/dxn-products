@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DXN | Catálogo de Productos Elegantes</title>
+  <meta name="description" content="Descubre los productos exclusivos de DXN. Ingredientes premium para tu bienestar." />
+</head>
+<body>
+  <div class="container">
+    <nav class="navbar">
+      <div class="brand">DXN</div>
+      <div class="nav-links">
+        <a href="/">Catálogo</a>
+        <a href="/login.html" id="nav-login-btn" class="btn btn-gold">Iniciar Sesión</a>
+        <a href="/admin.html" id="nav-admin-btn" class="hidden">Panel Admin</a>
+        <button id="nav-logout-btn" class="btn btn-danger hidden">Cerrar Sesión</button>
+      </div>
+    </nav>
+
+    <main>
+      <header class="text-center mb-8">
+        <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 16px;">Viviendo el Estilo DXN</h1>
+        <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto; font-size: 1.1rem;">
+          Explora nuestra selección premium de productos de bienestar. Haz clic en el que más te guste para obtener más información o adquirirlo.
+        </p>
+      </header>
+
+      <div class="products-grid" id="products-container">
+        <!-- Products will be injected here via JS -->
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="/src/js/main.js"></script>
+</body>
+</html>
