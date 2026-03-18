@@ -2,7 +2,7 @@ import '../css/style.css';
 import { auth, db } from './firebase.js';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { 
-  collection, getDocs, addDoc, updateDoc, doc, deleteDoc 
+  collection, getDocs, addDoc, updateDoc, doc, deleteDoc, getDoc 
 } from 'firebase/firestore';
 
 const adminContent = document.getElementById('admin-content');
@@ -16,14 +16,32 @@ const btnShowForm = document.getElementById('btn-show-form');
 const btnCancel = document.getElementById('btn-cancel');
 const formTitle = document.getElementById('form-title');
 
+const contactForm = document.getElementById('contact-form');
+const contactEmail = document.getElementById('contact-email');
+const contactWhatsApp = document.getElementById('contact-whatsapp');
+
 let productsList = [];
 
-// Rutas Integradas - Protegidas para usuarios logueados.
-onAuthStateChanged(auth, (user) => {
+// Rutas Integradas - Protegidas estrictamente para el rol 'admin'
+onAuthStateChanged(auth, async (user) => {
   if (user) {
-    unauthorizedMsg.style.display = 'none';
-    adminContent.style.display = 'block';
-    loadAdminProducts();
+    try {
+      unauthorizedMsg.textContent = 'Verificando permisos de administrador...';
+      const userDoc = await getDoc(doc(db, 'users', user.uid));
+      
+      if (userDoc.exists() && userDoc.data().role === 'admin') {
+        unauthorizedMsg.style.display = 'none';
+        adminContent.style.display = 'block';
+        loadAdminProducts();
+        loadContactInfo();
+      } else {
+        unauthorizedMsg.innerHTML = 'Acceso denegado: Necesitas ser el Administrador oficial para ver este panel.<br><br><a href="/" style="color:var(--accent-primary)">Volver al Catálogo</a>';
+        unauthorizedMsg.style.color = 'var(--text-secondary)';
+      }
+    } catch(e) {
+      unauthorizedMsg.textContent = 'Error validando tu nivel de seguridad en Firestore.';
+      unauthorizedMsg.style.color = 'var(--danger)';
+    }
   } else {
     // No logueado, redirigir
     window.location.href = '/login.html';
@@ -156,3 +174,45 @@ productForm.addEventListener('submit', async (e) => {
     submitBtn.textContent = 'Guardar Producto';
   }
 });
+
+// Settings / Contact logic
+async function loadContactInfo() {
+  try {
+    const docRef = doc(db, 'settings', 'contact');
+    const snap = await getDoc(docRef);
+    if (snap.exists()) {
+      contactEmail.value = snap.data().email || '';
+      contactWhatsApp.value = snap.data().whatsapp || '';
+    }
+  } catch (e) {
+    console.error("Error cargando ajustes", e);
+  }
+}
+
+if(contactForm) {
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('btn-save-contact');
+    btn.textContent = 'Guardando...';
+    btn.disabled = true;
+    try {
+      await updateDoc(doc(db, 'settings', 'contact'), {
+        email: contactEmail.value,
+        whatsapp: contactWhatsApp.value
+      }).catch(async (err) => {
+        // If document doesn't exist, updateDoc fails. Use setDoc.
+        const { setDoc } = await import('firebase/firestore');
+        await setDoc(doc(db, 'settings', 'contact'), {
+          email: contactEmail.value,
+          whatsapp: contactWhatsApp.value
+        });
+      });
+      alert('¡Información de contacto actualizada con éxito!');
+    } catch(e) {
+      console.error(e);
+      alert('Error al guardar contacto. ¿Tienes permisos en la colección settings?');
+    }
+    btn.textContent = 'Guardar Ajustes';
+    btn.disabled = false;
+  });
+}

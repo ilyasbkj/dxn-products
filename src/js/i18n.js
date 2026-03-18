@@ -1,0 +1,196 @@
+const translations = {
+  es: {
+    nav_products: "Productos",
+    nav_about: "Nosotros",
+    nav_contact: "Contacto",
+    nav_login: "Entrar",
+    nav_register: "Registrarse",
+    nav_admin: "Admin",
+    nav_logout: "Salir",
+    hero_badge: "CATÁLOGO",
+    hero_title: "Nuestros Productos",
+    hero_subtitle: "Selección de los mejores suplementos y bebidas naturales DXN",
+    loading: "Cargando productos...",
+    about_badge: "QUIÉNES SOMOS",
+    about_title: "Calidad y confianza desde 1993",
+    about_desc1: "DXN es una empresa multinacional de salud y bienestar reconocida mundialmente por sus productos derivados del Ganoderma Lucidum, un hongo con siglos de historia en la medicina oriental.",
+    about_desc2: "Nuestros productos pasan por rigurosos controles de calidad para garantizar pureza y efectividad en cada dosis.",
+    stat_countries: "PAÍSES",
+    stat_distributors: "DISTRIBUIDORES",
+    stat_years: "AÑOS",
+    nature_badge: "100% NATURAL • BIENESTAR INTEGRAL",
+    nature_title: "Naturaleza <br><span style='font-style: italic; color: var(--accent-gold);'>en cada gota</span>",
+    nature_desc: "Productos DXN derivados del Ganoderma Lucidum para una vida más saludable y equilibrada.",
+    nature_btn: "DESCUBRIR PRODUCTOS",
+    contact_badge: "CONTACTO",
+    contact_title: "¿Tienes alguna pregunta?",
+    contact_desc: "Estamos aquí para ayudarte a encontrar el producto ideal.",
+    contact_email: "✉ info@dxn.es",
+    contact_whatsapp: "📱 WhatsApp",
+    footer_legal: "Aviso legal",
+    footer_privacy: "Privacidad",
+    btn_learn_more: "Saber más"
+  },
+  en: {
+    nav_products: "Products",
+    nav_about: "About Us",
+    nav_contact: "Contact",
+    nav_login: "Log in",
+    nav_register: "Register",
+    nav_admin: "Admin",
+    nav_logout: "Log out",
+    hero_badge: "CATALOG",
+    hero_title: "Our Products",
+    hero_subtitle: "Selection of the best natural DXN supplements and beverages",
+    loading: "Loading products...",
+    about_badge: "WHO WE ARE",
+    about_title: "Quality and trust since 1993",
+    about_desc1: "DXN is a multinational health and wellness company globally recognized for its products derived from Ganoderma Lucidum, a mushroom with centuries of history in oriental medicine.",
+    about_desc2: "Our products go through rigorous quality controls to ensure purity and effectiveness in every dose.",
+    stat_countries: "COUNTRIES",
+    stat_distributors: "DISTRIBUTORS",
+    stat_years: "YEARS",
+    nature_badge: "100% NATURAL • HOLISTIC WELLNESS",
+    nature_title: "Nature <br><span style='font-style: italic; color: var(--accent-gold);'>in every drop</span>",
+    nature_desc: "DXN products derived from Ganoderma Lucidum for a healthier and balanced life.",
+    nature_btn: "DISCOVER PRODUCTS",
+    contact_badge: "CONTACT",
+    contact_title: "Do you have any questions?",
+    contact_desc: "We are here to help you find the ideal product.",
+    contact_email: "✉ info@dxn.com",
+    contact_whatsapp: "📱 WhatsApp",
+    footer_legal: "Legal Notice",
+    footer_privacy: "Privacy Policy",
+    btn_learn_more: "Learn more"
+  },
+  fr: {
+    nav_products: "Produits",
+    nav_about: "À propos",
+    nav_contact: "Contact",
+    nav_login: "Connexion",
+    nav_register: "S'inscrire",
+    nav_admin: "Admin",
+    nav_logout: "Déconnexion",
+    hero_badge: "CATALOGUE",
+    hero_title: "Nos Produits",
+    hero_subtitle: "Sélection des meilleurs compléments et boissons naturels DXN",
+    loading: "Chargement...",
+    about_badge: "QUI SOMMES-NOUS",
+    about_title: "Qualité et confiance depuis 1993",
+    about_desc1: "DXN est une multinationale de la santé et du bien-être mondialement reconnue pour ses produits dérivés du Ganoderma Lucidum, un champignon avec des siècles d'histoire.",
+    about_desc2: "Nos produits sont soumis à des contrôles qualité rigoureux pour garantir leur pureté et leur efficacité.",
+    stat_countries: "PAYS",
+    stat_distributors: "DISTRIBUTEURS",
+    stat_years: "ANNÉES",
+    nature_badge: "100% NATUREL • BIEN-ÊTRE INTÉGRAL",
+    nature_title: "La Nature <br><span style='font-style: italic; color: var(--accent-gold);'>dans chaque goutte</span>",
+    nature_desc: "Produits DXN dérivés du Ganoderma Lucidum pour une vie plus saine et équilibrée.",
+    nature_btn: "DÉCOUVRIR LES PRODUITS",
+    contact_badge: "CONTACT",
+    contact_title: "Avez-vous des questions?",
+    contact_desc: "Nous sommes là pour vous aider à trouver le produit idéal.",
+    contact_email: "✉ info@dxn.fr",
+    contact_whatsapp: "📱 WhatsApp",
+    footer_legal: "Mentions légales",
+    footer_privacy: "Confidentialité",
+    btn_learn_more: "En savoir plus"
+  },
+  ca: {
+    nav_products: "Productes",
+    nav_about: "Nosaltres",
+    nav_contact: "Contacte",
+    nav_login: "Entrar",
+    nav_register: "Registrar-se",
+    nav_admin: "Admin",
+    nav_logout: "Sortir",
+    hero_badge: "CATÀLEG",
+    hero_title: "Els Nostres Productes",
+    hero_subtitle: "Selecció dels millors suplements i begudes naturals DXN",
+    loading: "Carregant productes...",
+    about_badge: "QUI SOM",
+    about_title: "Qualitat i confiança des de 1993",
+    about_desc1: "DXN és una empresa multinacional de salut i benestar reconeguda mundialment pels seus productes derivats del Ganoderma Lucidum, un fong amb segles d'història.",
+    about_desc2: "Els nostres productes passen per rigorosos controls de qualitat per garantir puresa i efectivitat.",
+    stat_countries: "PAÏSOS",
+    stat_distributors: "DISTRIBUÏDORS",
+    stat_years: "ANYS",
+    nature_badge: "100% NATURAL • BENESTAR INTEGRAL",
+    nature_title: "Natura <br><span style='font-style: italic; color: var(--accent-gold);'>a cada gota</span>",
+    nature_desc: "Productes DXN derivats del Ganoderma Lucidum per a una vida més saludable i equilibrada.",
+    nature_btn: "DESCOBRIR PRODUCTES",
+    contact_badge: "CONTACTE",
+    contact_title: "Tens cap pregunta?",
+    contact_desc: "Estem aquí per ajudar-te a trobar el producte ideal.",
+    contact_email: "✉ info@dxn.cat",
+    contact_whatsapp: "📱 WhatsApp",
+    footer_legal: "Avís legal",
+    footer_privacy: "Privacitat",
+    btn_learn_more: "Més informació"
+  },
+  ar: {
+    nav_products: "المنتجات",
+    nav_about: "معلومات عنا",
+    nav_contact: "اتصل بنا",
+    nav_login: "دخول",
+    nav_register: "اشتراك",
+    nav_admin: "المشرف",
+    nav_logout: "خروج",
+    hero_badge: "فهرس",
+    hero_title: "منتجاتنا",
+    hero_subtitle: "مجموعة من أفضل مكملات DXN الطبيعية والمشروبات",
+    loading: "جاري التحميل...",
+    about_badge: "من نحن",
+    about_title: "الجودة والثقة منذ عام 1993",
+    about_desc1: "DXN هي شركة عالمية للصحة والعافية معترف بها لمنتجاتها المشتقة من فطر يمتد لقرون في الطب الشرقي.",
+    about_desc2: "تخضع منتجاتنا لضوابط جودة صارمة لضمان النقاء والفعالية.",
+    stat_countries: "دول",
+    stat_distributors: "موزعين",
+    stat_years: "سنوات",
+    nature_badge: "طبيعي 100٪ • عافية شاملة",
+    nature_title: "الطبيعة <br><span style='font-style: italic; color: var(--accent-gold);'>في كل قطرة</span>",
+    nature_desc: "منتجات DXN المشتقة من الفطر لحياة أكثر صحة وتوازنًا.",
+    nature_btn: "اكتشف المنتجات",
+    contact_badge: "اتصل",
+    contact_title: "هل لديك أسئلة؟",
+    contact_desc: "نحن هنا لمساعدتك في العثور على المنتج المثالي.",
+    contact_email: "✉ info@dxn.ae",
+    contact_whatsapp: "📱 واتساب",
+    footer_legal: "إشعار قانوني",
+    footer_privacy: "الخصوصية",
+    btn_learn_more: "المزيد"
+  }
+};
+
+export function setLanguage(lang) {
+  if (!translations[lang]) return;
+  
+  localStorage.setItem('dxn_lang', lang);
+  
+  document.documentElement.lang = lang;
+  if (lang === 'ar') {
+    document.documentElement.dir = 'rtl';
+  } else {
+    document.documentElement.dir = 'ltr';
+  }
+
+  const elements = document.querySelectorAll('[data-i18n]');
+  elements.forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (translations[lang][key]) {
+      el.innerHTML = translations[lang][key];
+    }
+  });
+  
+  const select = document.getElementById('language-selector');
+  if (select) select.value = lang;
+}
+
+export function initI18n() {
+  const savedLang = localStorage.getItem('dxn_lang') || 'es';
+  setLanguage(savedLang);
+
+  const select = document.getElementById('language-selector');
+  if (select) {
+    select.addEventListener('change', (e) => setLanguage(e.target.value));
+  }
+}

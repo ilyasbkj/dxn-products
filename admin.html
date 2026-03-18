@@ -16,6 +16,25 @@
     </nav>
 
     <main id="admin-content" style="display: none;">
+      
+      <!-- Contact Settings Form -->
+      <section class="glass-card mb-8">
+        <div class="admin-header">
+          <h2 style="font-size: 1.5rem; margin-bottom: 20px;">Información de Contacto</h2>
+        </div>
+        <form id="contact-form">
+          <div class="form-group">
+            <label>Email de Contacto</label>
+            <input type="email" id="contact-email" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label>Número de WhatsApp (con código de país, ej: 34...)</label>
+            <input type="text" id="contact-whatsapp" class="form-control" required />
+          </div>
+          <button type="submit" class="btn btn-primary" id="btn-save-contact">Guardar Ajustes</button>
+        </form>
+      </section>
+
       <section class="glass-card mb-8">
         <div class="admin-header">
           <h2>Gestión de Productos</h2>

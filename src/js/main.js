@@ -1,7 +1,10 @@
 import '../css/style.css';
 import { db, auth } from './firebase.js';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { initI18n, setLanguage } from './i18n.js';
+
+initI18n();
 
 const productsContainer = document.getElementById('products-container');
 const loginBtn = document.getElementById('nav-login-btn');
@@ -13,7 +16,20 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     loginBtn.classList.add('hidden');
     logoutBtn.classList.remove('hidden');
-    adminBtn.classList.remove('hidden'); // Simplified: all logged in users see admin panel for testing prototype
+    
+    // Verificar si es administrador REAL en la base de datos
+    try {
+      const docRef = doc(db, 'users', user.uid);
+      const userDoc = await getDoc(docRef);
+      if (userDoc.exists() && userDoc.data().role === 'admin') {
+        adminBtn.classList.remove('hidden');
+      } else {
+        adminBtn.classList.add('hidden');
+      }
+    } catch (e) {
+      console.error("Error verificando rol:", e);
+      adminBtn.classList.add('hidden');
+    }
   } else {
     loginBtn.classList.remove('hidden');
     logoutBtn.classList.add('hidden');
@@ -74,12 +90,14 @@ function renderProducts(products) {
       </div>
       <div class="product-info">
         <h3 class="product-title">${product.name}</h3>
-        <p class="product-description">${product.description}</p>
-        <span class="btn btn-primary" style="align-self: flex-start; margin-top: auto;">Saber más</span>
+        <p class="product-desc">${product.description}</p>
+        <span class="btn btn-outline" style="align-self: flex-start; margin-top: auto;" data-i18n="btn_learn_more">Saber más</span>
       </div>
     `;
     productsContainer.appendChild(card);
   });
+  
+  setLanguage(localStorage.getItem('dxn_lang') || 'es');
 }
 
 function renderMockProducts() {
@@ -109,4 +127,26 @@ function renderMockProducts() {
   renderProducts(mockProducts);
 }
 
+async function loadContactInfo() {
+  try {
+    const snap = await getDoc(doc(db, 'settings', 'contact'));
+    if (snap.exists()) {
+      const data = snap.data();
+      const emailBtn = document.getElementById('footer-email-btn');
+      const waBtn = document.getElementById('footer-wa-btn');
+      if(emailBtn && data.email) {
+        emailBtn.href = `mailto:${data.email}`;
+        emailBtn.innerHTML = `✉ ${data.email}`;
+      }
+      if(waBtn && data.whatsapp) {
+        const cleanWa = data.whatsapp.replace(/\\D/g, '');
+        waBtn.href = `https://wa.me/${cleanWa}`;
+      }
+    }
+  } catch(e) {
+    console.warn("Módulo contacto usa valores default");
+  }
+}
+
 loadProducts();
+loadContactInfo();

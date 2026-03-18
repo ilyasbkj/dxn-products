@@ -1,27 +1,31 @@
 :root {
-  /* Color Palette - DXN Elegant Dark Theme */
-  --bg-primary: #0f172a; 
-  --bg-secondary: #1e293b;
-  --accent-primary: #3b82f6; 
-  --accent-secondary: #6366f1; 
-  --accent-gold: #f59e0b; 
-  --accent-gold-hover: #d97706;
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
+  /* Color Palette - DXN Nature Theme */
+  --bg-primary: #fcfcf9; /* Off-white/Beige */
+  --bg-secondary: #f4f1e1; /* Secondary Beige for cards/sections */
+  --accent-primary: #294432; /* Dark Green */
+  --accent-secondary: #3b5c45; /* Lighter Green */
+  --accent-gold: #c3a466; /* Elegant muted gold */
+  
+  --text-primary: #1f3024;
+  --text-secondary: #606d64;
+  --text-inverse: #fcfcf9;
+  
   --danger: #ef4444;
-  --success: #10b981;
+  --success: #6bb052;
 
-  /* Glassmorphism */
-  --glass-bg: rgba(30, 41, 59, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  --backdrop-blur: 12px;
+  /* UI Elements */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-shadow: 0 4px 20px 0 rgba(41, 68, 50, 0.05);
+  --backdrop-blur: 8px;
 
   /* Typography */
-  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
+  --font-family-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family-serif: 'Lora', 'Playfair Display', serif;
+  
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
   
   /* Layout */
   --container-width: 1200px;
@@ -29,13 +33,9 @@
 
 body {
   background-color: var(--bg-primary);
-  background-image: 
-    radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 85% 30%, rgba(245, 158, 11, 0.08) 0%, transparent 50%);
-  background-attachment: fixed;
   color: var(--text-primary);
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-sans);
   min-height: 100vh;
   display: flex;
   flex-direction: column;

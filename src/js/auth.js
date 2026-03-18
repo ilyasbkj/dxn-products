@@ -1,117 +1,94 @@
 import '../css/style.css';
-import { auth, db } from './firebase.js';
+import { auth, db, provider } from './firebase.js';
 import { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword,
+  signInWithPopup,
   onAuthStateChanged
 } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 
-// Referencias DOM
 const tabLogin = document.getElementById('tab-login');
 const tabRegister = document.getElementById('tab-register');
 const formLogin = document.getElementById('form-login');
 const formRegister = document.getElementById('form-register');
 const loginError = document.getElementById('login-error');
 const regError = document.getElementById('reg-error');
+const btnGoogleLogin = document.getElementById('btn-google-login');
+const btnGoogleRegister = document.getElementById('btn-google-register');
 
-// Redirect si ya hay sesión iniciada
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    window.location.href = '/';
+onAuthStateChanged(auth, (user) => { if (user) window.location.href = '/'; });
+
+function switchTab(showLogin) {
+  if(showLogin) {
+    tabLogin.style.color = "var(--accent-primary)";
+    tabLogin.style.borderBottom = "2px solid var(--accent-primary)";
+    tabRegister.style.color = "var(--text-secondary)";
+    tabRegister.style.borderBottom = "none";
+    formLogin.classList.remove('hidden');
+    formRegister.classList.add('hidden');
+  } else {
+    tabRegister.style.color = "var(--accent-primary)";
+    tabRegister.style.borderBottom = "2px solid var(--accent-primary)";
+    tabLogin.style.color = "var(--text-secondary)";
+    tabLogin.style.borderBottom = "none";
+    formRegister.classList.remove('hidden');
+    formLogin.classList.add('hidden');
   }
-});
-
-// Pestañas
-tabLogin.addEventListener('click', () => {
-  tabLogin.classList.add('active');
-  tabRegister.classList.remove('active');
-  formLogin.classList.remove('hidden');
-  formRegister.classList.add('hidden');
   loginError.style.display = 'none';
   regError.style.display = 'none';
-});
+}
 
-tabRegister.addEventListener('click', () => {
-  tabRegister.classList.add('active');
-  tabLogin.classList.remove('active');
-  formRegister.classList.remove('hidden');
-  formLogin.classList.add('hidden');
-  loginError.style.display = 'none';
-  regError.style.display = 'none';
-});
+tabLogin.addEventListener('click', () => switchTab(true));
+tabRegister.addEventListener('click', () => switchTab(false));
 
-// Submit de Login
 formLogin.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const email = document.getElementById('login-email').value;
-  const password = document.getElementById('login-password').value;
-  const btn = formLogin.querySelector('button');
-  
+  const btn = formLogin.querySelector('button[type="submit"]');
   try {
-    btn.textContent = 'Verificando...';
     btn.disabled = true;
-    
-    await signInWithEmailAndPassword(auth, email, password);
-    window.location.href = '/'; 
-  } catch (error) {
-    console.error(error);
-    loginError.textContent = "Error: " + getSpanishError(error.code);
+    await signInWithEmailAndPassword(auth, document.getElementById('login-email').value, document.getElementById('login-password').value);
+  } catch (err) {
+    loginError.textContent = getSpanishError(err.code);
     loginError.style.display = 'block';
-    btn.textContent = 'Entrar';
     btn.disabled = false;
   }
 });
 
-// Submit de Registro
 formRegister.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const email = document.getElementById('reg-email').value;
-  const password = document.getElementById('reg-password').value;
-  const btn = formRegister.querySelector('button');
-  
+  const btn = formRegister.querySelector('button[type="submit"]');
   try {
-    btn.textContent = 'Creando cuenta...';
     btn.disabled = true;
-    
-    // Crear usuario Auth
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
-    
-    // Guardar rol en Firestore (por defecto user)
-    try {
-      await setDoc(doc(db, 'users', user.uid), {
-        uid: user.uid,
-        email: email,
-        role: "user" 
-      });
-    } catch(dbError) {
-      console.warn("No se pudo escribir en 'users' (faltan reglas Firestore en el backend):", dbError);
-    }
-    
-    window.location.href = '/';
-  } catch (error) {
-    console.error(error);
-    regError.textContent = "Error: " + getSpanishError(error.code);
+    const cred = await createUserWithEmailAndPassword(auth, document.getElementById('reg-email').value, document.getElementById('reg-password').value);
+    await setDoc(doc(db, 'users', cred.user.uid), { uid: cred.user.uid, email: cred.user.email, role: "user" }, { merge: true });
+  } catch (err) {
+    regError.textContent = getSpanishError(err.code);
     regError.style.display = 'block';
-    btn.textContent = 'Registrarme';
     btn.disabled = false;
   }
 });
 
-function getSpanishError(code) {
-  switch(code) {
-    case 'auth/invalid-credential':
-    case 'auth/user-not-found':
-    case 'auth/wrong-password':
-      return 'Credenciales inválidas. Verifica tu correo y contraseña.';
-    case 'auth/email-already-in-use':
-      return 'El correo ya está registrado.';
-    case 'auth/weak-password':
-      return 'La contraseña debe tener al menos 6 caracteres.';
-    case 'auth/network-request-failed':
-      return 'Error de red o de configuración de Firebase.';
-    default:
-      return code;
+async function handleGoogleAuth(errorElement) {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const userDocRef = doc(db, 'users', result.user.uid);
+    const userDoc = await getDoc(userDocRef);
+    if (!userDoc.exists()) {
+      await setDoc(userDocRef, { uid: result.user.uid, email: result.user.email, role: "user" });
+    }
+  } catch (err) {
+    errorElement.textContent = "Error al conectar con Google.";
+    errorElement.style.display = 'block';
   }
+}
+
+btnGoogleLogin.addEventListener('click', () => handleGoogleAuth(loginError));
+btnGoogleRegister.addEventListener('click', () => handleGoogleAuth(regError));
+
+function getSpanishError(code) {
+  if (code.includes('invalid-credential') || code.includes('user-not-found')) return 'Credenciales incorrectas.';
+  if (code.includes('email-already-in-use')) return 'Este correo ya tiene una cuenta activa.';
+  if (code.includes('weak-password')) return 'Contraseña demasiado corta (mínimo 6 caracteres).';
+  return 'Ocurrió un error (revisa opciones de Firebase Auth y habilitar Sign-in de correo/Google).';
 }

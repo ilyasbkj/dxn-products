@@ -3,34 +3,100 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DXN | Catálogo de Productos Elegantes</title>
-  <meta name="description" content="Descubre los productos exclusivos de DXN. Ingredientes premium para tu bienestar." />
+  <title>DXN | Naturaleza en cada gota</title>
 </head>
 <body>
-  <div class="container">
-    <nav class="navbar">
-      <div class="brand">DXN</div>
-      <div class="nav-links">
-        <a href="/">Catálogo</a>
-        <a href="/login.html" id="nav-login-btn" class="btn btn-gold">Iniciar Sesión</a>
-        <a href="/admin.html" id="nav-admin-btn" class="hidden">Panel Admin</a>
-        <button id="nav-logout-btn" class="btn btn-danger hidden">Cerrar Sesión</button>
-      </div>
-    </nav>
+  
+  <nav class="navbar" id="navbar">
+    <a href="/" class="brand">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="#6bb052"><path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 7.05,10.62 10.6,13.75C12.18,14.6 14.28,15.65 17,16L18.5,14.2C15.6,13.4 13.5,12.25 11.8,11.2C14.4,10.5 17,9.5 17,8Z"/></svg>
+      DXN
+    </a>
+    <div class="nav-center">
+      <a href="#productos" data-i18n="nav_products">Productos</a>
+      <a href="#about" data-i18n="nav_about">Nosotros</a>
+      <a href="#contact" data-i18n="nav_contact">Contacto</a>
+    </div>
+    <div class="nav-right">
+      <select id="language-selector" class="lang-selector">
+        <option value="es">ES ▼</option>
+        <option value="en">EN ▼</option>
+        <option value="ar">AR ▼</option>
+        <option value="fr">FR ▼</option>
+        <option value="ca">CA ▼</option>
+      </select>
+      <a href="/login.html" id="nav-login-btn" class="btn btn-outline" data-i18n="nav_login">Entrar</a>
+      <a href="/login.html" id="nav-register-btn" class="btn btn-primary" data-i18n="nav_register">Registrarse</a>
+      
+      <a href="/admin.html" id="nav-admin-btn" class="hidden btn btn-outline" data-i18n="nav_admin">Admin</a>
+      <button id="nav-logout-btn" class="btn btn-outline hidden" data-i18n="nav_logout">Salir</button>
+    </div>
+  </nav>
 
-    <main>
-      <header class="text-center mb-8">
-        <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 16px;">Viviendo el Estilo DXN</h1>
-        <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto; font-size: 1.1rem;">
-          Explora nuestra selección premium de productos de bienestar. Haz clic en el que más te guste para obtener más información o adquirirlo.
-        </p>
-      </header>
-
-      <div class="products-grid" id="products-container">
-        <!-- Products will be injected here via JS -->
+  <main>
+    <section id="productos" class="hero-section">
+      <div class="hero-badge" data-i18n="hero_badge">CATÁLOGO</div>
+      <h1 class="hero-title" data-i18n="hero_title">Nuestros Productos</h1>
+      <p class="hero-subtitle" data-i18n="hero_subtitle">Selección de los mejores suplementos y bebidas naturales DXN</p>
+      
+      <div class="container">
+        <div class="products-grid" id="products-container" style="margin-top: 60px;">
+          <div class="text-center" style="grid-column: 1/-1;" data-i18n="loading">Cargando productos...</div>
+        </div>
       </div>
-    </main>
-  </div>
+    </section>
+
+    <section id="about" class="about-section container">
+      <div class="about-mushroom"></div>
+      <div class="about-content">
+        <div class="hero-badge" data-i18n="about_badge">QUIÉNES SOMOS</div>
+        <h2 style="font-size: 2.8rem; margin-bottom: 24px;" data-i18n="about_title">Calidad y confianza desde 1993</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 20px;" data-i18n="about_desc1">DXN es una empresa multinacional de salud y bienestar reconocida mundialmente por sus productos derivados del Ganoderma Lucidum, un hongo con siglos de historia en la medicina oriental.</p>
+        <p style="color: var(--text-secondary);" data-i18n="about_desc2">Nuestros productos pasan por rigurosos controles de calidad para garantizar pureza y efectividad en cada dosis.</p>
+        
+        <div class="stats-container">
+          <div class="stat-box">
+            <div class="stat-number">180+</div>
+            <div class="stat-label" data-i18n="stat_countries">PAÍSES</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">9M+</div>
+            <div class="stat-label" data-i18n="stat_distributors">DISTRIBUIDORES</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">30+</div>
+            <div class="stat-label" data-i18n="stat_years">AÑOS</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="hero-section" style="background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(107, 176, 82, 0.05) 100%); margin-top: 60px;">
+      <div class="hero-badge" data-i18n="nature_badge">100% NATURAL • BIENESTAR INTEGRAL</div>
+      <h2 style="font-size: 4rem; margin-bottom: 16px;" data-i18n="nature_title">Naturaleza <br><span style="font-style: italic; color: var(--accent-gold);">en cada gota</span></h2>
+      <p style="color: var(--text-secondary); max-width: 500px; margin: 0 auto 40px;" data-i18n="nature_desc">Productos DXN derivados del Ganoderma Lucidum para una vida más saludable y equilibrada.</p>
+      <a href="#navbar" class="btn btn-primary" style="padding: 14px 32px;" data-i18n="nature_btn">DESCUBRIR PRODUCTOS</a>
+    </section>
+
+    <section id="contact" class="footer-banner">
+      <div class="hero-badge" data-i18n="contact_badge">CONTACTO</div>
+      <h2 style="font-size: 3rem; max-width: 500px; margin: 0 auto; line-height: 1.1;" data-i18n="contact_title">¿Tienes alguna pregunta?</h2>
+      <p style="color: var(--text-secondary); margin-top: 16px;" data-i18n="contact_desc">Estamos aquí para ayudarte a encontrar el producto ideal.</p>
+      <div class="footer-buttons">
+        <a href="mailto:info@dxn.es" id="footer-email-btn" class="btn btn-outline" style="background: white;">✉ info@dxn.es</a>
+        <a href="https://wa.me/34000000000" target="_blank" id="footer-wa-btn" class="btn btn-outline" style="background: white;" data-i18n="contact_whatsapp">📱 WhatsApp</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="main-footer">
+    <div class="brand" style="font-size: 1rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #6bb052; vertical-align: middle;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> DXN</div>
+    <div>© 2025 DXN Salud Natural. Todos los derechos reservados.</div>
+    <div style="display: flex; gap: 16px;">
+      <a href="#" data-i18n="footer_legal">Aviso legal</a>
+      <a href="#" data-i18n="footer_privacy">Privacidad</a>
+    </div>
+  </footer>
 
   <script type="module" src="/src/js/main.js"></script>
 </body>
