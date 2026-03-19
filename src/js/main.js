@@ -24,6 +24,7 @@ onAuthStateChanged(auth, async (user) => {
       const docRef = doc(db, 'users', user.uid);
       const userDoc = await getDoc(docRef);
       if (userDoc.exists() && userDoc.data().role === 'admin') {
+        adminBtn.href = '/panel-z8x2k9m4.html';
         adminBtn.classList.remove('hidden');
       } else {
         adminBtn.classList.add('hidden');
