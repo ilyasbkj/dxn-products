@@ -124,7 +124,7 @@ function renderProducts(products) {
           </div>
           <div class="product-info">
             <h3 class="product-title">${product.name}</h3>
-            <p class="product-desc">${description}</p>
+            <p class="product-desc" style="white-space: pre-wrap;">${description}</p>
             <span class="btn btn-outline" style="align-self: flex-start; margin-top: auto;" data-i18n="btn_learn_more">Saber más</span>
           </div>
         `;
