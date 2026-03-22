@@ -150,6 +150,11 @@ a:hover { color: var(--accent-primary); }
   color: var(--text-secondary);
   margin-bottom: 20px;
   flex-grow: 1;
+  text-align: justify;
+}
+
+.text-justify {
+  text-align: justify;
 }
 
 .about-section {

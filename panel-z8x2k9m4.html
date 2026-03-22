@@ -146,8 +146,8 @@
             <thead>
               <tr>
                 <th>Imagen</th>
-                <th>Título</th>
-                <th>Extracto</th>
+                <th>Título (ES)</th>
+                <th>Estracto (ES)</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -163,14 +163,50 @@
         <form id="article-form">
           <input type="hidden" id="art-id" />
           
+          <h4 style="margin-bottom: 10px; font-size: 1rem;">Títulos por Idioma</h4>
           <div class="form-group">
-            <label for="art-title">Título del Artículo</label>
-            <input type="text" id="art-title" class="form-control" required />
+            <label>Español (ES)</label>
+            <input type="text" id="art-title-es" class="form-control" required />
           </div>
           <div class="form-group">
-            <label for="art-desc">Contenido o Extracto</label>
-            <textarea id="art-desc" class="form-control" rows="5" required></textarea>
+            <label>Inglés (EN)</label>
+            <input type="text" id="art-title-en" class="form-control" />
           </div>
+          <div class="form-group">
+            <label>Francés (FR)</label>
+            <input type="text" id="art-title-fr" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>Catalán (CA)</label>
+            <input type="text" id="art-title-ca" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>Árabe (AR)</label>
+            <input type="text" id="art-title-ar" class="form-control" />
+          </div>
+
+          <h4 style="margin: 20px 0 10px; font-size: 1rem;">Contenido por Idioma</h4>
+          <div class="form-group">
+            <label>Español (ES)</label>
+            <textarea id="art-desc-es" class="form-control" rows="4" required></textarea>
+          </div>
+          <div class="form-group">
+            <label>Inglés (EN)</label>
+            <textarea id="art-desc-en" class="form-control" rows="4"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Francés (FR)</label>
+            <textarea id="art-desc-fr" class="form-control" rows="4"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Catalán (CA)</label>
+            <textarea id="art-desc-ca" class="form-control" rows="4"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Árabe (AR)</label>
+            <textarea id="art-desc-ar" class="form-control" rows="4"></textarea>
+          </div>
+
           <div class="form-group">
             <label for="art-img">URL de Imagen (Opcional)</label>
             <input type="url" id="art-img" class="form-control" placeholder="https://ejemplo.com/imagen.jpg" />

@@ -236,8 +236,8 @@ function renderArticlesTable() {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td style="width: 80px"><img src="${art.imageUrl || 'https://via.placeholder.com/50'}" style="width:50px; height:50px; object-fit:cover; border-radius:4px" /></td>
-      <td><strong>${art.title}</strong></td>
-      <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${art.description}</td>
+      <td><strong>${art.title_es || art.title || 'Sin título'}</strong></td>
+      <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${art.desc_es || art.description || 'Sin descripción'}</td>
       <td style="width: 180px">
         <button class="btn action-btn bg-gold" style="padding: 6px 12px; font-size: 0.8em; margin-right: 5px; background:var(--accent-gold); color:black; border-radius: 4px;" onclick="editArticle('${art.id}')">Editar</button>
         <button class="btn action-btn bg-danger" style="padding: 6px 12px; font-size: 0.8em; border-radius: 4px; border:none; background:var(--danger); color:white;" onclick="deleteArticle('${art.id}')">Eliminar</button>
@@ -253,8 +253,19 @@ window.editArticle = (id) => {
   
   articleFormTitle.textContent = 'Editar Artículo';
   document.getElementById('art-id').value = art.id;
-  document.getElementById('art-title').value = art.title;
-  document.getElementById('art-desc').value = art.description;
+  
+  document.getElementById('art-title-es').value = art.title_es || art.title || '';
+  document.getElementById('art-title-en').value = art.title_en || '';
+  document.getElementById('art-title-fr').value = art.title_fr || '';
+  document.getElementById('art-title-ca').value = art.title_ca || '';
+  document.getElementById('art-title-ar').value = art.title_ar || '';
+  
+  document.getElementById('art-desc-es').value = art.desc_es || art.description || '';
+  document.getElementById('art-desc-en').value = art.desc_en || '';
+  document.getElementById('art-desc-fr').value = art.desc_fr || '';
+  document.getElementById('art-desc-ca').value = art.desc_ca || '';
+  document.getElementById('art-desc-ar').value = art.desc_ar || '';
+  
   document.getElementById('art-img').value = art.imageUrl || '';
   
   articleFormContainer.classList.remove('hidden');
@@ -282,8 +293,16 @@ articleForm.addEventListener('submit', async (e) => {
   
   const id = document.getElementById('art-id').value;
   const data = {
-    title: document.getElementById('art-title').value,
-    description: document.getElementById('art-desc').value,
+    title_es: document.getElementById('art-title-es').value,
+    title_en: document.getElementById('art-title-en').value,
+    title_fr: document.getElementById('art-title-fr').value,
+    title_ca: document.getElementById('art-title-ca').value,
+    title_ar: document.getElementById('art-title-ar').value,
+    desc_es: document.getElementById('art-desc-es').value,
+    desc_en: document.getElementById('art-desc-en').value,
+    desc_fr: document.getElementById('art-desc-fr').value,
+    desc_ca: document.getElementById('art-desc-ca').value,
+    desc_ar: document.getElementById('art-desc-ar').value,
     imageUrl: document.getElementById('art-img').value,
     createdAt: new Date().toISOString()
   };

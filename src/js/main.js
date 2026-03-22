@@ -230,20 +230,23 @@ async function loadArticles() {
 
     articles.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
 
+    const lang = localStorage.getItem('dxn_lang') || 'es';
     articlesContainer.innerHTML = '';
     articles.forEach(art => {
       const card = document.createElement('div');
       card.className = 'glass-card product-card';
       
       const imageUrl = art.imageUrl || 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80';
-      
+      const title = art[`title_${lang}`] || art.title_es || art.title || 'Sin título';
+      const desc = art[`desc_${lang}`] || art.desc_es || art.description || '';
+
       card.innerHTML = `
         <div class="product-image-container">
-          <img src="${imageUrl}" alt="${art.title}" class="product-image" loading="lazy" />
+          <img src="${imageUrl}" alt="${title}" class="product-image" loading="lazy" />
         </div>
         <div class="product-info">
-          <h3 class="product-title" style="margin-bottom: 15px;">${art.title}</h3>
-          <p class="product-desc" style="white-space: pre-wrap; margin-bottom: 0;">${art.description}</p>
+          <h3 class="product-title" style="margin-bottom: 15px;">${title}</h3>
+          <p class="product-desc" style="white-space: pre-wrap; margin-bottom: 0;">${desc}</p>
         </div>
       `;
       articlesContainer.appendChild(card);
@@ -258,7 +261,10 @@ const langSelector = document.getElementById('language-selector');
 if (langSelector) {
   langSelector.addEventListener('change', () => {
     // Small delay to allow i18n to save the new lang in localStorage
-    setTimeout(updateWorkDescription, 50);
+    setTimeout(() => {
+      updateWorkDescription();
+      loadArticles();
+    }, 50);
   });
 }
 
