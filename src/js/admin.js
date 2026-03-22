@@ -129,7 +129,7 @@ function renderTable() {
     tr.innerHTML = `
       <td style="width: 80px"><img src="${prod.imageUrl || 'https://via.placeholder.com/50'}" style="width:50px; height:50px; object-fit:cover; border-radius:4px" /></td>
       <td><strong>${prod.name}</strong></td>
-      <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${prod.description}</td>
+      <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${prod.desc_es || prod.description || 'Sin descripción'}</td>
       <td><a href="${prod.link}" target="_blank" style="color: var(--accent-primary)">Enlace Afiliado/Compra</a></td>
       <td style="width: 180px">
         <button class="btn action-btn bg-gold" style="padding: 6px 12px; font-size: 0.8em; margin-right: 5px; background:var(--accent-gold); color:black; border-radius: 4px;" onclick="editProduct('${prod.id}')">Editar</button>
@@ -149,7 +149,13 @@ window.editProduct = (id) => {
   document.getElementById('prod-id').value = product.id;
   document.getElementById('prod-name').value = product.name;
   document.getElementById('prod-category').value = product.category || 'drinks';
-  document.getElementById('prod-desc').value = product.description;
+  
+  document.getElementById('prod-desc-es').value = product.desc_es || product.description || '';
+  document.getElementById('prod-desc-en').value = product.desc_en || '';
+  document.getElementById('prod-desc-fr').value = product.desc_fr || '';
+  document.getElementById('prod-desc-ca').value = product.desc_ca || '';
+  document.getElementById('prod-desc-ar').value = product.desc_ar || '';
+  
   document.getElementById('prod-img').value = product.imageUrl || '';
   document.getElementById('prod-link').value = product.link || '';
   
@@ -181,7 +187,11 @@ productForm.addEventListener('submit', async (e) => {
   const productData = {
     name: document.getElementById('prod-name').value,
     category: document.getElementById('prod-category').value,
-    description: document.getElementById('prod-desc').value,
+    desc_es: document.getElementById('prod-desc-es').value,
+    desc_en: document.getElementById('prod-desc-en').value,
+    desc_fr: document.getElementById('prod-desc-fr').value,
+    desc_ca: document.getElementById('prod-desc-ca').value,
+    desc_ar: document.getElementById('prod-desc-ar').value,
     imageUrl: document.getElementById('prod-img').value,
     link: document.getElementById('prod-link').value
   };

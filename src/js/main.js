@@ -115,13 +115,16 @@ function renderProducts(products) {
         
         const imageUrl = product.imageUrl || 'https://via.placeholder.com/600x400?text=DXN+Product';
         
+        const lang = localStorage.getItem('dxn_lang') || 'es';
+        const description = product[`desc_${lang}`] || product.desc_es || product.description || '';
+        
         card.innerHTML = `
           <div class="product-image-container">
             <img src="${imageUrl}" alt="${product.name}" class="product-image" loading="lazy" />
           </div>
           <div class="product-info">
             <h3 class="product-title">${product.name}</h3>
-            <p class="product-desc">${product.description}</p>
+            <p class="product-desc">${description}</p>
             <span class="btn btn-outline" style="align-self: flex-start; margin-top: auto;" data-i18n="btn_learn_more">Saber más</span>
           </div>
         `;
@@ -264,6 +267,7 @@ if (langSelector) {
     setTimeout(() => {
       updateWorkDescription();
       loadArticles();
+      loadProducts();
     }, 50);
   });
 }
