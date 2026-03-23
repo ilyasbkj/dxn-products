@@ -13,13 +13,51 @@ const logoutBtn = document.getElementById('nav-logout-btn');
 
 let workWithUsData = null;
 
+// Hero Slider Logic
+function initHeroSlider() {
+  const slides = document.querySelectorAll('.hero-slide');
+  if (slides.length === 0) return;
+  let currentSlide = 0;
+  
+  setInterval(() => {
+    slides[currentSlide].classList.remove('active');
+    currentSlide = (currentSlide + 1) % slides.length;
+    slides[currentSlide].classList.add('active');
+  }, 5000);
+}
+
+// About Tabs Logic
+function initAboutTabs() {
+  const tabs = document.querySelectorAll('.about-tab');
+  const contents = document.querySelectorAll('.about-tab-content');
+  
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.getAttribute('data-tab');
+      
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      
+      contents.forEach(content => {
+        content.classList.remove('active');
+        if (content.id === `${target.substring(0,3)}-content`) {
+           content.classList.add('active');
+        } else if (target === 'history' && content.id === 'hist-content') {
+           content.classList.add('active');
+        } else if (target === 'philosophy' && content.id === 'phi-content') {
+           content.classList.add('active');
+        }
+      });
+    });
+  });
+}
+
 // Manejo del estado de Autenticación
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    loginBtn.classList.add('hidden');
+    if (loginBtn) loginBtn.classList.add('hidden');
     logoutBtn.classList.remove('hidden');
     
-    // Verificar si es administrador REAL en la base de datos
     try {
       const docRef = doc(db, 'users', user.uid);
       const userDoc = await getDoc(docRef);
@@ -34,7 +72,7 @@ onAuthStateChanged(auth, async (user) => {
       adminBtn.classList.add('hidden');
     }
   } else {
-    loginBtn.classList.remove('hidden');
+    if (loginBtn) loginBtn.classList.remove('hidden');
     logoutBtn.classList.add('hidden');
     adminBtn.classList.add('hidden');
   }
@@ -54,7 +92,8 @@ if (logoutBtn) {
 
 // Carga de productos
 async function loadProducts() {
-  productsContainer.innerHTML = '<div class="text-center" style="grid-column: 1 / -1;"><p>Cargando catálogo brillante...</p></div>';
+  if (!productsContainer) return;
+  productsContainer.innerHTML = '<div class="text-center" style="grid-column: 1 / -1;"><p>Cargando productos...</p></div>';
   
   try {
     const querySnapshot = await getDocs(collection(db, 'products'));
@@ -64,14 +103,13 @@ async function loadProducts() {
     });
 
     if (products.length === 0) {
-      // Show fallback mock products if database is empty
       renderMockProducts();
       return;
     }
 
     renderProducts(products);
   } catch (error) {
-    console.warn("Fallo en la conexión de Firebase (posiblemente falta configuración). Mostrando datos de prueba.");
+    console.warn("Fallo en la conexión de Firebase. Mostrando datos de prueba.");
     renderMockProducts();
   }
 }
@@ -79,58 +117,29 @@ async function loadProducts() {
 function renderProducts(products) {
   productsContainer.innerHTML = '';
   
-  const categories = {
-    drinks: { key: 'cat_drinks', items: [] },
-    supplements: { key: 'cat_supps', items: [] },
-    hygiene: { key: 'cat_hygiene', items: [] }
-  };
-  
-  // Categorize
-  products.forEach(p => {
-    const cat = p.category && categories[p.category] ? p.category : 'drinks';
-    categories[cat].items.push(p);
-  });
-
-  // Render
-  Object.keys(categories).forEach(cat => {
-    if (categories[cat].items.length > 0) {
-      const header = document.createElement('h3');
-      header.className = 'category-title';
-      header.style.gridColumn = '1 / -1';
-      header.style.textAlign = 'left';
-      header.style.marginTop = '40px';
-      header.style.fontSize = '2rem';
-      header.style.color = 'var(--text-primary)';
-      header.style.borderBottom = '2px solid var(--accent-gold)';
-      header.style.paddingBottom = '10px';
-      header.setAttribute('data-i18n', categories[cat].key);
-      productsContainer.appendChild(header);
-      
-      categories[cat].items.forEach(product => {
-        const card = document.createElement('a');
-        card.href = product.link || '#';
-        card.target = "_blank";
-        card.className = 'glass-card product-card';
-        card.rel = "noopener noreferrer";
-        
-        const imageUrl = product.imageUrl || 'https://via.placeholder.com/600x400?text=DXN+Product';
-        
-        const lang = localStorage.getItem('dxn_lang') || 'es';
-        const description = product[`desc_${lang}`] || product.desc_es || product.description || '';
-        
-        card.innerHTML = `
-          <div class="product-image-container">
-            <img src="${imageUrl}" alt="${product.name}" class="product-image" loading="lazy" />
-          </div>
-          <div class="product-info">
-            <h3 class="product-title">${product.name}</h3>
-            <p class="product-desc" style="white-space: pre-wrap;">${description}</p>
-            <span class="btn btn-outline" style="align-self: flex-start; margin-top: auto;" data-i18n="btn_learn_more">Saber más</span>
-          </div>
-        `;
-        productsContainer.appendChild(card);
-      });
-    }
+  products.forEach(product => {
+    const card = document.createElement('a');
+    card.href = product.link || '#';
+    card.target = "_blank";
+    card.className = 'product-card';
+    card.rel = "noopener noreferrer";
+    
+    const imageUrl = product.imageUrl || 'https://via.placeholder.com/600x400?text=DXN+Product';
+    
+    const lang = localStorage.getItem('dxn_lang') || 'es';
+    const description = product[`desc_${lang}`] || product.desc_es || product.description || '';
+    
+    card.innerHTML = `
+      <div class="product-image-container">
+        <img src="${imageUrl}" alt="${product.name}" class="product-image" loading="lazy" />
+      </div>
+      <div class="product-info">
+        <h3 class="product-title">${product.name}</h3>
+        <p class="product-desc" style="white-space: pre-wrap;">${description.length > 80 ? description.substring(0, 80) + '...' : description}</p>
+        <span class="btn btn-outline" style="font-size: 0.7rem; padding: 8px 15px;" data-i18n="btn_learn_more">Saber más</span>
+      </div>
+    `;
+    productsContainer.appendChild(card);
   });
 
   setLanguage(localStorage.getItem('dxn_lang') || 'es');
@@ -141,26 +150,37 @@ function renderMockProducts() {
     {
       id: "1",
       name: "Café Lingzhi 3 en 1",
-      category: "drinks",
-      description: "Delicioso café con extracto de Ganoderma, perfecto para empezar tu mañana con energía y bienestar duradero.",
-      imageUrl: "https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=800&auto=format&fit=crop",
+      description: "Delicioso café con extracto de Ganoderma, perfecto para empezar tu mañana con energía.",
+      imageUrl: "https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=400&auto=format&fit=crop",
       link: "#"
     },
     {
-      id: "2",
-      name: "Spirulina Cereal",
-      category: "supplements",
-      description: "Nutrición completa en un cereal crujiente, ideal para toda la familia y para mantener un estilo de vida saludable.",
-      imageUrl: "https://images.unsplash.com/photo-1490474504059-1f1e10269f41?q=80&w=800&auto=format&fit=crop",
-      link: "#"
+       id: "2",
+       name: "Cocozhi",
+       description: "Bebida de cacao con extracto de Ganoderma, ideal para niños y adultos.",
+       imageUrl: "https://images.unsplash.com/photo-1544787210-2213d8196695?q=80&w=400&auto=format&fit=crop",
+       link: "#"
     },
     {
-      id: "3",
-      name: "DXN Ganozhi Jabón",
-      category: "hygiene",
-      description: "Cuidado de la piel premium con extracto de Ganoderma que limpia, hidrata y protege tu piel, dejándola suave y radiante.",
-      imageUrl: "https://images.unsplash.com/photo-1600857062241-987114b03658?q=80&w=800&auto=format&fit=crop",
-      link: "#"
+       id: "3",
+       name: "Spirulina Cereal",
+       description: "Nutrición completa en un cereal crujiente, ideal para toda la familia.",
+       imageUrl: "https://images.unsplash.com/photo-1490474504059-1f1e10269f41?q=80&w=400&auto=format&fit=crop",
+       link: "#"
+    },
+    {
+       id: "4",
+       name: "Morinzhi",
+       description: "Bebida botánica nutritiva formulada a partir de Morinda citrifolia.",
+       imageUrl: "https://images.unsplash.com/photo-1615484477778-ca3b77940c25?q=80&w=400&auto=format&fit=crop",
+       link: "#"
+    },
+    {
+       id: "5",
+       name: "DXN Ganozhi Jabón",
+       description: "Cuidado de la piel premium con extracto de Ganoderma.",
+       imageUrl: "https://images.unsplash.com/photo-1600857062241-987114b03658?q=80&w=400&auto=format&fit=crop",
+       link: "#"
     }
   ];
   renderProducts(mockProducts);
@@ -175,7 +195,6 @@ async function loadContactInfo() {
       const waBtn = document.getElementById('footer-wa-btn');
       if(emailBtn && data.email) {
         emailBtn.href = `mailto:${data.email}`;
-        emailBtn.innerHTML = `✉ ${data.email}`;
       }
       if(waBtn && data.whatsapp) {
         const cleanWa = data.whatsapp.replace(/\D/g, '');
@@ -217,7 +236,7 @@ async function loadArticles() {
   const articlesContainer = document.getElementById('articles-container');
   if (!articlesContainer) return;
   
-  articlesContainer.innerHTML = '<div class="text-center" style="grid-column: 1 / -1;"><p>Cargando artículos...</p></div>';
+  articlesContainer.innerHTML = '<div class="text-center" style="grid-column: 1 / -1;"><p>Cargando noticias...</p></div>';
   
   try {
     const querySnapshot = await getDocs(collection(db, 'articles'));
@@ -227,7 +246,7 @@ async function loadArticles() {
     });
 
     if (articles.length === 0) {
-      articlesContainer.innerHTML = '<div class="text-center" style="grid-column: 1 / -1; color: var(--text-secondary);">Próximamente publicaremos novedades interesantes.</div>';
+      articlesContainer.innerHTML = '<div class="text-center" style="grid-column: 1 / -1; color: var(--text-secondary); padding: 40px;">Próximamente publicaremos novedades interesantes.</div>';
       return;
     }
 
@@ -235,11 +254,11 @@ async function loadArticles() {
 
     const lang = localStorage.getItem('dxn_lang') || 'es';
     articlesContainer.innerHTML = '';
-    articles.forEach(art => {
+    articles.slice(0, 5).forEach(art => {
       const card = document.createElement('div');
-      card.className = 'glass-card product-card';
+      card.className = 'product-card';
       
-      const imageUrl = art.imageUrl || 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80';
+      const imageUrl = art.imageUrl || 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=400&q=80';
       const title = art[`title_${lang}`] || art.title_es || art.title || 'Sin título';
       const desc = art[`desc_${lang}`] || art.desc_es || art.description || '';
 
@@ -248,8 +267,8 @@ async function loadArticles() {
           <img src="${imageUrl}" alt="${title}" class="product-image" loading="lazy" />
         </div>
         <div class="product-info">
-          <h3 class="product-title" style="margin-bottom: 15px;">${title}</h3>
-          <p class="product-desc" style="white-space: pre-wrap; margin-bottom: 0;">${desc}</p>
+          <h3 class="product-title" style="min-height: auto; margin-bottom: 10px;">${title}</h3>
+          <p class="product-desc" style="white-space: pre-wrap; margin-bottom: 0;">${desc.length > 60 ? desc.substring(0, 60) + '...' : desc}</p>
         </div>
       `;
       articlesContainer.appendChild(card);
@@ -263,7 +282,6 @@ async function loadArticles() {
 const langSelector = document.getElementById('language-selector');
 if (langSelector) {
   langSelector.addEventListener('change', () => {
-    // Small delay to allow i18n to save the new lang in localStorage
     setTimeout(() => {
       updateWorkDescription();
       loadArticles();
@@ -272,6 +290,8 @@ if (langSelector) {
   });
 }
 
+initHeroSlider();
+initAboutTabs();
 loadProducts();
 loadContactInfo();
 loadWorkSettings();

@@ -1,34 +1,36 @@
 :root {
-  /* Color Palette - DXN Nature Theme */
-  --bg-primary: #fcfcf9; /* Off-white/Beige */
-  --bg-secondary: #f4f1e1; /* Secondary Beige for cards/sections */
-  --accent-primary: #294432; /* Dark Green */
-  --accent-secondary: #3b5c45; /* Lighter Green */
-  --accent-gold: #c3a466; /* Elegant muted gold */
+  /* Color Palette - DXN2U official theme */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --accent-primary: #6b7042; /* Olive Green */
+  --accent-secondary: #5a5e37;
+  --accent-gold: #c3a466;
+  --brand-red: #ed1c24;
+  --brand-blue: #0153a0;
   
-  --text-primary: #1f3024;
-  --text-secondary: #606d64;
-  --text-inverse: #fcfcf9;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-inverse: #ffffff;
   
-  --danger: #ef4444;
-  --success: #6bb052;
+  --danger: #ed1c24;
+  --success: #6b7042;
 
   /* UI Elements */
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-shadow: 0 4px 20px 0 rgba(41, 68, 50, 0.05);
-  --backdrop-blur: 8px;
+  --glass-bg: rgba(255, 255, 255, 0.9);
+  --glass-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  --backdrop-blur: 4px;
 
   /* Typography */
-  --font-family-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-family-serif: 'Lora', 'Playfair Display', serif;
+  --font-family-sans: 'Montserrat', 'Open Sans', 'Inter', sans-serif;
+  --font-family-serif: 'Montserrat', sans-serif; /* Using sans-serif for headings too */
   
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
+  --radius-sm: 4px;
+  --radius-md: 4px; /* More squared */
+  --radius-lg: 8px;
   --radius-full: 9999px;
   
   /* Layout */
-  --container-width: 1200px;
+  --container-width: 1170px;
 }
 
 body {
