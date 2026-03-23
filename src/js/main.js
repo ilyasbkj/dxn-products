@@ -11,7 +11,7 @@ const loginBtn = document.getElementById('nav-login-btn');
 const adminBtn = document.getElementById('nav-admin-btn');
 const logoutBtn = document.getElementById('nav-logout-btn');
 
-let workWithUsData = null;
+
 let allProducts = [];
 
 // Mobile Menu
@@ -47,7 +47,10 @@ function closeModal() {
   document.body.style.overflow = '';
 }
 
-if (modalClose) modalClose.addEventListener('click', closeModal);
+if (modalClose) {
+  modalClose.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); closeModal(); });
+  modalClose.addEventListener('touchend', (e) => { e.preventDefault(); e.stopPropagation(); closeModal(); });
+}
 if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
 // Hero Slider Logic
@@ -143,10 +146,11 @@ function renderCategories() {
   productsContainer.innerHTML = '';
   document.getElementById('category-filter-container').classList.add('hidden');
 
+  const ci = window._categoryImages || {};
   const categories = [
-    { id: 'drinks', key: 'cat_drinks', img: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=400&auto=format&fit=crop' },
-    { id: 'supplements', key: 'cat_supps', img: 'https://images.unsplash.com/photo-1490474504059-1f1e10269f41?q=80&w=400&auto=format&fit=crop' },
-    { id: 'hygiene', key: 'cat_hygiene', img: 'https://images.unsplash.com/photo-1600857062241-987114b03658?q=80&w=400&auto=format&fit=crop' }
+    { id: 'drinks', key: 'cat_drinks', img: ci.drinks || 'https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=400&auto=format&fit=crop' },
+    { id: 'supplements', key: 'cat_supps', img: ci.supplements || 'https://images.unsplash.com/photo-1490474504059-1f1e10269f41?q=80&w=400&auto=format&fit=crop' },
+    { id: 'hygiene', key: 'cat_hygiene', img: ci.hygiene || 'https://images.unsplash.com/photo-1600857062241-987114b03658?q=80&w=400&auto=format&fit=crop' }
   ];
 
   categories.forEach(cat => {
@@ -247,30 +251,39 @@ async function loadArticles() {
   } catch (e) { console.error(e); }
 }
 
-// Gallery Logic
-function initGallery() {
+// Gallery Logic - loads from Firestore 'gallery' collection
+async function loadGallery() {
   const container = document.getElementById('gallery-container');
   if(!container) return;
-  
-  const videos = [
-    { title: "DXN One World One Market", id: "dQw4w9WgXcQ" },
-    { title: "Ganoderma Benefits", id: "j0Sdy7_9-m0" }
-  ];
+
+  let videos = [];
+  try {
+    const snap = await getDocs(collection(db, 'gallery'));
+    snap.forEach(d => videos.push({ id: d.id, ...d.data() }));
+  } catch(e) { console.warn('Gallery fallback'); }
+
+  if (videos.length === 0) {
+    videos = [
+      { title: 'DXN One World One Market', videoId: 'dQw4w9WgXcQ' },
+      { title: 'Ganoderma Benefits', videoId: 'j0Sdy7_9-m0' }
+    ];
+  }
 
   container.innerHTML = '';
   videos.forEach(v => {
+    const vid = v.videoId || v.id;
     const card = document.createElement('div');
     card.className = 'video-card cursor-pointer';
     card.innerHTML = `
-      <div class="video-thumb" style="background-image: url('https://img.youtube.com/vi/${v.id}/0.jpg');">
+      <div class="video-thumb" style="background-image: url('https://img.youtube.com/vi/${vid}/0.jpg');">
          <button class="play-btn">▶</button>
       </div>
       <p class="video-title">${v.title}</p>
     `;
     card.addEventListener('click', () => {
       openModal(`
-        <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-          <iframe src="https://www.youtube.com/embed/${v.id}?autoplay=1" 
+        <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+          <iframe src="https://www.youtube.com/embed/${vid}?autoplay=1" 
                   style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
@@ -281,12 +294,60 @@ function initGallery() {
   });
 }
 
+// Contact & Work settings
+async function loadContactInfo() {
+  try {
+    const snap = await getDoc(doc(db, 'settings', 'contact'));
+    if (snap.exists()) {
+      const data = snap.data();
+      const emailBtn = document.getElementById('footer-email-btn');
+      const waBtn = document.getElementById('footer-wa-btn');
+      if(emailBtn && data.email) emailBtn.href = `mailto:${data.email}`;
+      if(waBtn && data.whatsapp) waBtn.href = `https://wa.me/${data.whatsapp.replace(/\D/g, '')}`;
+    }
+  } catch(e) { console.warn('Contact defaults'); }
+}
+
+let workWithUsData = null;
+async function loadWorkSettings() {
+  try {
+    const snap = await getDoc(doc(db, 'settings', 'work_with_us'));
+    if (snap.exists()) {
+      workWithUsData = snap.data();
+      updateWorkDescription();
+    }
+  } catch(e) { console.error(e); }
+}
+
+function updateWorkDescription() {
+  if (!workWithUsData) return;
+  const lang = localStorage.getItem('dxn_lang') || 'es';
+  const descEl = document.getElementById('work-desc');
+  const linkEl = document.getElementById('work-link');
+  if (descEl) descEl.textContent = workWithUsData[`desc_${lang}`] || workWithUsData.desc_es || '';
+  if (linkEl && workWithUsData.link) linkEl.href = workWithUsData.link;
+}
+
+// Category images from Firestore
+async function loadCategoryImages() {
+  try {
+    const snap = await getDoc(doc(db, 'settings', 'categories'));
+    if (snap.exists()) {
+      const data = snap.data();
+      window._categoryImages = data;
+    }
+  } catch(e) { console.warn('Using default category images'); }
+}
+
 // Init everything
+await loadCategoryImages();
 initHeroSlider();
 initAboutTabs();
 loadProducts();
 loadArticles();
-initGallery();
+loadGallery();
+loadContactInfo();
+loadWorkSettings();
 
 const langSelector = document.getElementById('language-selector');
 if (langSelector) {
@@ -294,6 +355,7 @@ if (langSelector) {
     setTimeout(() => {
       loadArticles();
       loadProducts();
+      updateWorkDescription();
     }, 50);
   });
 }

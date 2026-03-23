@@ -235,6 +235,69 @@
           </div>
         </form>
       </section>
+
+      <!-- Gestión de Galería de Videos -->
+      <section class="glass-card mb-8">
+        <div class="admin-header">
+          <h2>Galería de Videos</h2>
+          <button id="btn-show-video-form" class="btn btn-primary">+ Nuevo Video</button>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Miniatura</th>
+                <th>Título</th>
+                <th>YouTube ID</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="gallery-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Formulario Video -->
+      <section id="video-form-container" class="glass-card hidden mb-8">
+        <h3 id="video-form-title" class="mb-4">Agregar Video</h3>
+        <form id="video-form">
+          <input type="hidden" id="vid-id" />
+          <div class="form-group">
+            <label>Título del Video</label>
+            <input type="text" id="vid-title" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label>ID de YouTube (ej: dQw4w9WgXcQ)</label>
+            <input type="text" id="vid-youtube-id" class="form-control" required placeholder="dQw4w9WgXcQ" />
+          </div>
+          <div style="display: flex; gap: 15px;">
+            <button type="submit" class="btn btn-primary">Guardar Video</button>
+            <button type="button" id="btn-cancel-video" class="btn btn-danger" style="background: transparent; border: 1px solid var(--glass-border); color: white;">Cancelar</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Imágenes de Categorías -->
+      <section class="glass-card mb-8">
+        <div class="admin-header">
+          <h2>Imágenes de Categorías de Productos</h2>
+        </div>
+        <form id="category-images-form">
+          <div class="form-group">
+            <label>Cafés y Bebidas (URL de imagen)</label>
+            <input type="url" id="cat-img-drinks" class="form-control" placeholder="https://ejemplo.com/cafes.jpg" />
+          </div>
+          <div class="form-group">
+            <label>Suplementos Alimenticios (URL de imagen)</label>
+            <input type="url" id="cat-img-supplements" class="form-control" placeholder="https://ejemplo.com/suplementos.jpg" />
+          </div>
+          <div class="form-group">
+            <label>Higiene Personal (URL de imagen)</label>
+            <input type="url" id="cat-img-hygiene" class="form-control" placeholder="https://ejemplo.com/higiene.jpg" />
+          </div>
+          <button type="submit" class="btn btn-primary" id="btn-save-categories">Guardar Imágenes de Categorías</button>
+        </form>
+      </section>
     </main>
 
     <div id="unauthorized-msg" class="text-center mt-4">

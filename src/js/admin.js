@@ -407,3 +407,165 @@ if(workForm) {
     btn.disabled = false;
   });
 }
+
+// ========== GALLERY VIDEOS ==========
+const galleryTbody = document.getElementById('gallery-tbody');
+const videoFormContainer = document.getElementById('video-form-container');
+const videoForm = document.getElementById('video-form');
+const btnShowVideoForm = document.getElementById('btn-show-video-form');
+const btnCancelVideo = document.getElementById('btn-cancel-video');
+const videoFormTitle = document.getElementById('video-form-title');
+
+let galleryList = [];
+
+if (btnShowVideoForm) {
+  btnShowVideoForm.addEventListener('click', () => {
+    videoFormContainer.classList.remove('hidden');
+    videoForm.reset();
+    document.getElementById('vid-id').value = '';
+    videoFormTitle.textContent = 'Agregar Video';
+    window.scrollTo({ top: videoFormContainer.offsetTop, behavior: 'smooth' });
+  });
+}
+
+if (btnCancelVideo) {
+  btnCancelVideo.addEventListener('click', () => {
+    videoFormContainer.classList.add('hidden');
+    videoForm.reset();
+  });
+}
+
+async function loadAdminGallery() {
+  if (!galleryTbody) return;
+  galleryTbody.innerHTML = '<tr><td colspan="4" class="text-center">Cargando videos...</td></tr>';
+  try {
+    const snap = await getDocs(collection(db, 'gallery'));
+    galleryList = [];
+    snap.forEach(d => galleryList.push({ id: d.id, ...d.data() }));
+    renderGalleryTable();
+  } catch(e) {
+    console.error(e);
+    galleryTbody.innerHTML = '<tr><td colspan="4" class="text-center" style="color:var(--danger)">Error al cargar videos.</td></tr>';
+  }
+}
+
+function renderGalleryTable() {
+  if (galleryList.length === 0) {
+    galleryTbody.innerHTML = '<tr><td colspan="4" class="text-center">No hay videos. Agrega el primero.</td></tr>';
+    return;
+  }
+  galleryTbody.innerHTML = '';
+  galleryList.forEach(v => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="width: 120px"><img src="https://img.youtube.com/vi/${v.videoId}/default.jpg" style="width:100px; border-radius:4px" /></td>
+      <td><strong>${v.title}</strong></td>
+      <td>${v.videoId}</td>
+      <td style="width: 180px">
+        <button class="btn action-btn bg-gold" style="padding: 6px 12px; font-size: 0.8em; margin-right: 5px; background:var(--accent-gold); color:black; border-radius: 4px;" onclick="editVideo('${v.id}')">Editar</button>
+        <button class="btn action-btn bg-danger" style="padding: 6px 12px; font-size: 0.8em; border-radius: 4px; border:none; background:var(--danger); color:white;" onclick="deleteVideo('${v.id}')">Eliminar</button>
+      </td>
+    `;
+    galleryTbody.appendChild(tr);
+  });
+}
+
+window.editVideo = (id) => {
+  const v = galleryList.find(x => x.id === id);
+  if (!v) return;
+  videoFormTitle.textContent = 'Editar Video';
+  document.getElementById('vid-id').value = v.id;
+  document.getElementById('vid-title').value = v.title || '';
+  document.getElementById('vid-youtube-id').value = v.videoId || '';
+  videoFormContainer.classList.remove('hidden');
+  window.scrollTo({ top: videoFormContainer.offsetTop, behavior: 'smooth' });
+};
+
+window.deleteVideo = async (id) => {
+  if (!confirm('¿Eliminar este video de la galería?')) return;
+  try {
+    await deleteDoc(doc(db, 'gallery', id));
+    await loadAdminGallery();
+  } catch(e) {
+    console.error(e);
+    alert('Error al eliminar video.');
+  }
+};
+
+if (videoForm) {
+  videoForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = videoForm.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = 'Guardando...';
+    const id = document.getElementById('vid-id').value;
+    const data = {
+      title: document.getElementById('vid-title').value,
+      videoId: document.getElementById('vid-youtube-id').value
+    };
+    try {
+      if (id) {
+        await updateDoc(doc(db, 'gallery', id), data);
+      } else {
+        await addDoc(collection(db, 'gallery'), data);
+      }
+      videoFormContainer.classList.add('hidden');
+      videoForm.reset();
+      await loadAdminGallery();
+    } catch(e) {
+      console.error(e);
+      alert('Error al guardar video.');
+    }
+    btn.disabled = false;
+    btn.textContent = 'Guardar Video';
+  });
+}
+
+// ========== CATEGORY IMAGES ==========
+const categoryForm = document.getElementById('category-images-form');
+
+async function loadCategoryImages() {
+  try {
+    const snap = await getDoc(doc(db, 'settings', 'categories'));
+    if (snap.exists()) {
+      const data = snap.data();
+      const drinksInput = document.getElementById('cat-img-drinks');
+      const suppsInput = document.getElementById('cat-img-supplements');
+      const hygInput = document.getElementById('cat-img-hygiene');
+      if (drinksInput) drinksInput.value = data.drinks || '';
+      if (suppsInput) suppsInput.value = data.supplements || '';
+      if (hygInput) hygInput.value = data.hygiene || '';
+    }
+  } catch(e) { console.warn('No category images saved yet'); }
+}
+
+if (categoryForm) {
+  categoryForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('btn-save-categories');
+    btn.textContent = 'Guardando...';
+    btn.disabled = true;
+    try {
+      await setDoc(doc(db, 'settings', 'categories'), {
+        drinks: document.getElementById('cat-img-drinks').value,
+        supplements: document.getElementById('cat-img-supplements').value,
+        hygiene: document.getElementById('cat-img-hygiene').value
+      }, { merge: true });
+      alert('¡Imágenes de categorías actualizadas!');
+    } catch(e) {
+      console.error(e);
+      alert('Error al guardar imágenes de categorías.');
+    }
+    btn.textContent = 'Guardar Imágenes de Categorías';
+    btn.disabled = false;
+  });
+}
+
+// Load gallery + category images on admin init
+// We piggyback on the auth check — these will be called after loadSettings
+const origLoadSettings = loadSettings;
+loadSettings = async function() {
+  await origLoadSettings();
+  await loadAdminGallery();
+  await loadCategoryImages();
+};
