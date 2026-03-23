@@ -252,6 +252,20 @@ async function loadArticles() {
 }
 
 // Gallery Logic - loads from Firestore 'gallery' collection
+function extractYouTubeId(input) {
+  if (!input) return null;
+  let match = input.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+  if (match) return match[1];
+  match = input.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+  if (match) return match[1];
+  match = input.match(/embed\/([a-zA-Z0-9_-]{11})/);
+  if (match) return match[1];
+  match = input.match(/shorts\/([a-zA-Z0-9_-]{11})/);
+  if (match) return match[1];
+  if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input;
+  return null;
+}
+
 async function loadGallery() {
   const container = document.getElementById('gallery-container');
   if(!container) return;
@@ -271,7 +285,8 @@ async function loadGallery() {
 
   container.innerHTML = '';
   videos.forEach(v => {
-    const vid = v.videoId || v.id;
+    const vid = extractYouTubeId(v.videoId) || extractYouTubeId(v.youtubeId) || v.videoId || '';
+    if (!vid) return; // skip invalid entries
     const card = document.createElement('div');
     card.className = 'video-card cursor-pointer';
     card.innerHTML = `
