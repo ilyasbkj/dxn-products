@@ -289,10 +289,18 @@ a:hover { color: var(--accent-primary); }
 }
 .modal-overlay.active { opacity: 1; visibility: visible; }
 .modal-content {
-  background: #fff; padding: 50px; max-width: 800px; width: 90%;
+  background: #fff; max-width: 800px; width: 90%;
   max-height: 90vh; overflow-y: auto; position: relative; border-radius: 4px;
+  padding: 50px 40px 40px;
 }
-.modal-close { position: absolute; top: 15px; right: 20px; font-size: 2.5rem; background: none; border: none; cursor: pointer; color: #999; z-index: 2001; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; }
+.modal-close {
+  position: sticky; top: 0; float: right;
+  font-size: 2rem; background: #fff; border: none; cursor: pointer; color: #666;
+  z-index: 2001; min-width: 48px; min-height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  margin: -10px -10px 10px auto;
+}
 
 /* Footer */
 .main-footer { background: #1a1a1a; color: #888; padding: 30px 0; font-size: 0.8rem; }
@@ -335,7 +343,15 @@ a:hover { color: var(--accent-primary); }
   .products-grid { grid-template-columns: repeat(2, 1fr); }
   .hero-section { height: 350px; }
   .section-title { font-size: 1.8rem; }
-  .modal-content { padding: 30px 20px; }
+  .modal-content {
+    width: 100%; max-width: 100%; max-height: 100vh; height: 100vh;
+    border-radius: 0; padding: 20px 15px;
+  }
+  .modal-close {
+    position: sticky; top: 0;
+    font-size: 1.8rem; min-width: 44px; min-height: 44px;
+    background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
 }
 
 @media (max-width: 480px) {
