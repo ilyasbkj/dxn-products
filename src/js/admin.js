@@ -499,9 +499,17 @@ if (videoForm) {
     btn.disabled = true;
     btn.textContent = 'Guardando...';
     const id = document.getElementById('vid-id').value;
+    const rawInput = document.getElementById('vid-youtube-id').value.trim();
+    const videoId = extractYouTubeId(rawInput);
+    if (!videoId) {
+      alert('No se pudo extraer el ID del video. Pega un enlace de YouTube o un ID válido.');
+      btn.disabled = false;
+      btn.textContent = 'Guardar Video';
+      return;
+    }
     const data = {
       title: document.getElementById('vid-title').value,
-      videoId: document.getElementById('vid-youtube-id').value
+      videoId: videoId
     };
     try {
       if (id) {
@@ -519,6 +527,25 @@ if (videoForm) {
     btn.disabled = false;
     btn.textContent = 'Guardar Video';
   });
+}
+
+function extractYouTubeId(input) {
+  if (!input) return null;
+  // Handle youtu.be/ID
+  let match = input.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+  if (match) return match[1];
+  // Handle youtube.com/watch?v=ID
+  match = input.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+  if (match) return match[1];
+  // Handle youtube.com/embed/ID
+  match = input.match(/embed\/([a-zA-Z0-9_-]{11})/);
+  if (match) return match[1];
+  // Handle youtube.com/shorts/ID
+  match = input.match(/shorts\/([a-zA-Z0-9_-]{11})/);
+  if (match) return match[1];
+  // If it looks like a raw 11-char ID
+  if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input;
+  return null;
 }
 
 // ========== CATEGORY IMAGES ==========
