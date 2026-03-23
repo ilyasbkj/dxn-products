@@ -31,7 +31,10 @@ const translations = {
     cat_drinks: "Cafés y Bebidas",
     cat_supps: "Suplementos alimenticios",
     cat_hygiene: "Higiene personal",
-    blog_title: "Últimas Noticias"
+    blog_title: "Últimas Noticias",
+    nav_gallery: "Galería",
+    gallery_title: "Galería de Videos",
+    about_founder_text: "<strong>Dr. Lim Siow Jin</strong> fundó DXN para combinar los beneficios de las hierbas tradicionales con la tecnología moderna y promover el bienestar global."
   },
   en: {
     nav_home: "Home",
@@ -65,7 +68,10 @@ const translations = {
     cat_drinks: "Coffee and Drinks",
     cat_supps: "Food Supplements",
     cat_hygiene: "Personal Hygiene",
-    blog_title: "Latest News"
+    blog_title: "Latest News",
+    nav_gallery: "Gallery",
+    gallery_title: "Video Gallery",
+    about_founder_text: "<strong>Dr. Lim Siow Jin</strong> founded DXN to combine the benefits of traditional herbs with modern technology and promote global wellness."
   },
   fr: {
     nav_home: "Accueil",
@@ -99,7 +105,10 @@ const translations = {
     cat_drinks: "Cafés et Boissons",
     cat_supps: "Compléments Alimentaires",
     cat_hygiene: "Hygiène Personnelle",
-    blog_title: "Dernières Nouvelles"
+    blog_title: "Dernières Nouvelles",
+    nav_gallery: "Galerie",
+    gallery_title: "Galerie Vidéo",
+    about_founder_text: "<strong>Dr. Lim Siow Jin</strong> a fondé DXN pour combiner les bienfaits des herbes traditionnelles avec la technologie moderne et promouvoir le bien-être mondial."
   },
   ca: {
     nav_home: "Inici",
@@ -133,7 +142,10 @@ const translations = {
     cat_drinks: "Cafès i Begudes",
     cat_supps: "Suplements Alimentaris",
     cat_hygiene: "Higiene Personal",
-    blog_title: "Últimes Notícies"
+    blog_title: "Últimes Notícies",
+    nav_gallery: "Galeria",
+    gallery_title: "Galeria de Vídeos",
+    about_founder_text: "<strong>Dr. Lim Siow Jin</strong> va fundar DXN per combinar els beneficis de les herbes tradicionals amb la tecnologia moderna i promoure el benestar global."
   },
   ar: {
     nav_home: "الصفحة الرئيسية",
@@ -167,7 +179,10 @@ const translations = {
     cat_drinks: "القهوة والمشروبات",
     cat_supps: "المكملات الغذائية",
     cat_hygiene: "العناية الشخصية",
-    blog_title: "آخر الأخبار"
+    blog_title: "آخر الأخبار",
+    nav_gallery: "معرض",
+    gallery_title: "معرض الفيديو",
+    about_founder_text: "<strong>الدكتور ليم سيو جين</strong> أسس DXN للجمع بين فوائد الأعشاب التقليدية والتكنولوجيا الحديثة وتعزيز الرفاهية العالمية."
   }
 };
 
