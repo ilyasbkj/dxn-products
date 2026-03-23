@@ -12,6 +12,43 @@ const adminBtn = document.getElementById('nav-admin-btn');
 const logoutBtn = document.getElementById('nav-logout-btn');
 
 let workWithUsData = null;
+let allProducts = [];
+
+// Mobile Menu
+const mobileToggle = document.getElementById('mobile-menu-toggle');
+const navMenu = document.getElementById('nav-menu');
+if (mobileToggle && navMenu) {
+  mobileToggle.addEventListener('click', () => {
+    navMenu.classList.toggle('active');
+  });
+  // Close menu on link click
+  navMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => navMenu.classList.remove('active'));
+  });
+}
+
+// Modal Logic
+const modal = document.getElementById('universal-modal');
+const modalBody = document.getElementById('modal-body');
+const modalClose = document.getElementById('modal-close');
+
+function openModal(content) {
+  console.log("Opening modal with content");
+  modalBody.innerHTML = content;
+  modal.classList.add('active');
+  modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  modal.classList.remove('active');
+  setTimeout(() => modal.classList.add('hidden'), 300);
+  modalBody.innerHTML = '';
+  document.body.style.overflow = '';
+}
+
+if (modalClose) modalClose.addEventListener('click', closeModal);
+if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
 // Hero Slider Logic
 function initHeroSlider() {
@@ -52,247 +89,211 @@ function initAboutTabs() {
   });
 }
 
-// Manejo del estado de Autenticación
+// Authentication
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     if (loginBtn) loginBtn.classList.add('hidden');
-    logoutBtn.classList.remove('hidden');
-    
+    if (logoutBtn) logoutBtn.classList.remove('hidden');
     try {
       const docRef = doc(db, 'users', user.uid);
       const userDoc = await getDoc(docRef);
       if (userDoc.exists() && userDoc.data().role === 'admin') {
         adminBtn.href = '/panel-z8x2k9m4.html';
         adminBtn.classList.remove('hidden');
-      } else {
-        adminBtn.classList.add('hidden');
       }
-    } catch (e) {
-      console.error("Error verificando rol:", e);
-      adminBtn.classList.add('hidden');
-    }
+    } catch (e) { console.error(e); }
   } else {
     if (loginBtn) loginBtn.classList.remove('hidden');
-    logoutBtn.classList.add('hidden');
-    adminBtn.classList.add('hidden');
+    if (logoutBtn) logoutBtn.classList.add('hidden');
+    if (adminBtn) adminBtn.classList.add('hidden');
   }
 });
 
-// Logout
 if (logoutBtn) {
   logoutBtn.addEventListener('click', async () => {
-    try {
-      await signOut(auth);
-      window.location.reload();
-    } catch (e) {
-      console.error(e);
-    }
+    await signOut(auth);
+    window.location.reload();
   });
 }
 
-// Carga de productos
+// Products Logic
 async function loadProducts() {
   if (!productsContainer) return;
-  productsContainer.innerHTML = '<div class="text-center" style="grid-column: 1 / -1;"><p>Cargando productos...</p></div>';
+  productsContainer.innerHTML = '<div class="text-center" style="grid-column: 1 / -1;"><p data-i18n="loading">Cargando...</p></div>';
   
   try {
     const querySnapshot = await getDocs(collection(db, 'products'));
-    const products = [];
+    allProducts = [];
     querySnapshot.forEach((doc) => {
-      products.push({ id: doc.id, ...doc.data() });
+      allProducts.push({ id: doc.id, ...doc.data() });
     });
 
-    if (products.length === 0) {
-      renderMockProducts();
-      return;
+    if (allProducts.length === 0) {
+      allProducts = getMockProducts();
     }
-
-    renderProducts(products);
+    renderCategories();
   } catch (error) {
-    console.warn("Fallo en la conexión de Firebase. Mostrando datos de prueba.");
-    renderMockProducts();
+    console.warn("Using mock products");
+    allProducts = getMockProducts();
+    renderCategories();
   }
 }
 
-function renderProducts(products) {
+function renderCategories() {
   productsContainer.innerHTML = '';
+  document.getElementById('category-filter-container').classList.add('hidden');
+
+  const categories = [
+    { id: 'drinks', key: 'cat_drinks', img: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=400&auto=format&fit=crop' },
+    { id: 'supplements', key: 'cat_supps', img: 'https://images.unsplash.com/photo-1490474504059-1f1e10269f41?q=80&w=400&auto=format&fit=crop' },
+    { id: 'hygiene', key: 'cat_hygiene', img: 'https://images.unsplash.com/photo-1600857062241-987114b03658?q=80&w=400&auto=format&fit=crop' }
+  ];
+
+  categories.forEach(cat => {
+    const card = document.createElement('div');
+    card.className = 'product-card cursor-pointer';
+    card.innerHTML = `
+      <div class="product-image-container">
+        <img src="${cat.img}" alt="${cat.id}" class="product-image" />
+      </div>
+      <div class="product-info text-center">
+        <h3 class="product-title" data-i18n="${cat.key}">${cat.id}</h3>
+      </div>
+    `;
+    card.addEventListener('click', () => renderProducts(cat.id));
+    productsContainer.appendChild(card);
+  });
+  setLanguage(localStorage.getItem('dxn_lang') || 'es');
+}
+
+function renderProducts(category) {
+  productsContainer.innerHTML = '';
+  document.getElementById('category-filter-container').classList.remove('hidden');
+
+  const filtered = allProducts.filter(p => (p.category === category) || (!p.category && category === 'drinks'));
   
-  products.forEach(product => {
-    const card = document.createElement('a');
-    card.href = product.link || '#';
-    card.target = "_blank";
+  filtered.forEach(product => {
+    const card = document.createElement('div');
     card.className = 'product-card';
-    card.rel = "noopener noreferrer";
-    
-    const imageUrl = product.imageUrl || 'https://via.placeholder.com/600x400?text=DXN+Product';
-    
     const lang = localStorage.getItem('dxn_lang') || 'es';
     const description = product[`desc_${lang}`] || product.desc_es || product.description || '';
     
     card.innerHTML = `
       <div class="product-image-container">
-        <img src="${imageUrl}" alt="${product.name}" class="product-image" loading="lazy" />
+        <img src="${product.imageUrl || 'https://via.placeholder.com/400'}" alt="${product.name}" class="product-image" />
       </div>
       <div class="product-info">
         <h3 class="product-title">${product.name}</h3>
-        <p class="product-desc" style="white-space: pre-wrap;">${description.length > 80 ? description.substring(0, 80) + '...' : description}</p>
-        <span class="btn btn-outline" style="font-size: 0.7rem; padding: 8px 15px;" data-i18n="btn_learn_more">Saber más</span>
+        <p class="product-desc">${description.length > 80 ? description.substring(0, 80) + '...' : description}</p>
+        <a href="${product.link || '#'}" target="_blank" class="btn btn-outline" style="font-size: 0.7rem; padding: 8px 15px;" data-i18n="btn_learn_more">Saber más</a>
       </div>
     `;
     productsContainer.appendChild(card);
   });
-
   setLanguage(localStorage.getItem('dxn_lang') || 'es');
 }
 
-function renderMockProducts() {
-  const mockProducts = [
-    {
-      id: "1",
-      name: "Café Lingzhi 3 en 1",
-      description: "Delicioso café con extracto de Ganoderma, perfecto para empezar tu mañana con energía.",
-      imageUrl: "https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=400&auto=format&fit=crop",
-      link: "#"
-    },
-    {
-       id: "2",
-       name: "Cocozhi",
-       description: "Bebida de cacao con extracto de Ganoderma, ideal para niños y adultos.",
-       imageUrl: "https://images.unsplash.com/photo-1544787210-2213d8196695?q=80&w=400&auto=format&fit=crop",
-       link: "#"
-    },
-    {
-       id: "3",
-       name: "Spirulina Cereal",
-       description: "Nutrición completa en un cereal crujiente, ideal para toda la familia.",
-       imageUrl: "https://images.unsplash.com/photo-1490474504059-1f1e10269f41?q=80&w=400&auto=format&fit=crop",
-       link: "#"
-    },
-    {
-       id: "4",
-       name: "Morinzhi",
-       description: "Bebida botánica nutritiva formulada a partir de Morinda citrifolia.",
-       imageUrl: "https://images.unsplash.com/photo-1615484477778-ca3b77940c25?q=80&w=400&auto=format&fit=crop",
-       link: "#"
-    },
-    {
-       id: "5",
-       name: "DXN Ganozhi Jabón",
-       description: "Cuidado de la piel premium con extracto de Ganoderma.",
-       imageUrl: "https://images.unsplash.com/photo-1600857062241-987114b03658?q=80&w=400&auto=format&fit=crop",
-       link: "#"
-    }
+document.getElementById('back-to-categories')?.addEventListener('click', renderCategories);
+
+function getMockProducts() {
+  return [
+    { id: "1", name: "Café Lingzhi 3 en 1", category: "drinks", desc_es: "Café con Ganoderma...", imageUrl: "https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=400" },
+    { id: "2", name: "Cocozhi", category: "drinks", desc_es: "Bebida de cacao...", imageUrl: "https://images.unsplash.com/photo-1544787210-2213d8196695?q=80&w=400" },
+    { id: "3", name: "Spirulina Cereal", category: "supplements", desc_es: "Nutrición completa...", imageUrl: "https://images.unsplash.com/photo-1490474504059-1f1e10269f41?q=80&w=400" }
   ];
-  renderProducts(mockProducts);
 }
 
-async function loadContactInfo() {
-  try {
-    const snap = await getDoc(doc(db, 'settings', 'contact'));
-    if (snap.exists()) {
-      const data = snap.data();
-      const emailBtn = document.getElementById('footer-email-btn');
-      const waBtn = document.getElementById('footer-wa-btn');
-      if(emailBtn && data.email) {
-        emailBtn.href = `mailto:${data.email}`;
-      }
-      if(waBtn && data.whatsapp) {
-        const cleanWa = data.whatsapp.replace(/\D/g, '');
-        waBtn.href = `https://wa.me/${cleanWa}`;
-      }
-    }
-  } catch(e) {
-    console.warn("Módulo contacto usa valores default");
-  }
-}
-
-async function loadWorkSettings() {
-  try {
-    const snap = await getDoc(doc(db, 'settings', 'work_with_us'));
-    if (snap.exists()) {
-      workWithUsData = snap.data();
-      updateWorkDescription();
-    }
-  } catch(e) {
-    console.error("Error loading work_with_us", e);
-  }
-}
-
-function updateWorkDescription() {
-  if (!workWithUsData) return;
-  const lang = localStorage.getItem('dxn_lang') || 'es';
-  const descEl = document.getElementById('work-desc');
-  const linkEl = document.getElementById('work-link');
-  
-  if (descEl) {
-    descEl.textContent = workWithUsData[`desc_${lang}`] || workWithUsData.desc_es || '';
-  }
-  if (linkEl && workWithUsData.link) {
-    linkEl.href = workWithUsData.link;
-  }
-}
-
+// Articles Logic
 async function loadArticles() {
   const articlesContainer = document.getElementById('articles-container');
   if (!articlesContainer) return;
   
-  articlesContainer.innerHTML = '<div class="text-center" style="grid-column: 1 / -1;"><p>Cargando noticias...</p></div>';
-  
   try {
     const querySnapshot = await getDocs(collection(db, 'articles'));
     const articles = [];
-    querySnapshot.forEach((doc) => {
-      articles.push({ id: doc.id, ...doc.data() });
-    });
+    querySnapshot.forEach((doc) => { articles.push({ id: doc.id, ...doc.data() }); });
 
     if (articles.length === 0) {
-      articlesContainer.innerHTML = '<div class="text-center" style="grid-column: 1 / -1; color: var(--text-secondary); padding: 40px;">Próximamente publicaremos novedades interesantes.</div>';
+      articlesContainer.innerHTML = '<p class="text-center" style="grid-column: 1/-1;">No hay noticias disponibles.</p>';
       return;
     }
-
-    articles.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
 
     const lang = localStorage.getItem('dxn_lang') || 'es';
     articlesContainer.innerHTML = '';
     articles.slice(0, 5).forEach(art => {
       const card = document.createElement('div');
-      card.className = 'product-card';
-      
-      const imageUrl = art.imageUrl || 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=400&q=80';
+      card.className = 'product-card cursor-pointer';
       const title = art[`title_${lang}`] || art.title_es || art.title || 'Sin título';
       const desc = art[`desc_${lang}`] || art.desc_es || art.description || '';
 
       card.innerHTML = `
         <div class="product-image-container">
-          <img src="${imageUrl}" alt="${title}" class="product-image" loading="lazy" />
+          <img src="${art.imageUrl || 'https://via.placeholder.com/400'}" alt="${title}" class="product-image" />
         </div>
         <div class="product-info">
-          <h3 class="product-title" style="min-height: auto; margin-bottom: 10px;">${title}</h3>
-          <p class="product-desc" style="white-space: pre-wrap; margin-bottom: 0;">${desc.length > 60 ? desc.substring(0, 60) + '...' : desc}</p>
+          <h3 class="product-title">${title}</h3>
+          <p class="product-desc">${desc.length > 60 ? desc.substring(0, 60) + '...' : desc}</p>
         </div>
       `;
+      card.addEventListener('click', () => {
+        openModal(`
+          <h2 class="section-title text-left">${title}</h2>
+          <img src="${art.imageUrl || ''}" style="width: 100%; border-radius: 4px; margin-bottom: 20px;" />
+          <div style="white-space: pre-wrap; line-height: 1.6;">${desc}</div>
+        `);
+      });
       articlesContainer.appendChild(card);
     });
-  } catch (error) {
-    console.error("Error loading articles", error);
-    articlesContainer.innerHTML = '<div class="text-center" style="grid-column: 1 / -1;">No se pudieron cargar los artículos en este momento.</div>';
-  }
+  } catch (e) { console.error(e); }
 }
+
+// Gallery Logic
+function initGallery() {
+  const container = document.getElementById('gallery-container');
+  if(!container) return;
+  
+  const videos = [
+    { title: "DXN One World One Market", id: "dQw4w9WgXcQ" },
+    { title: "Ganoderma Benefits", id: "j0Sdy7_9-m0" }
+  ];
+
+  container.innerHTML = '';
+  videos.forEach(v => {
+    const card = document.createElement('div');
+    card.className = 'video-card cursor-pointer';
+    card.innerHTML = `
+      <div class="video-thumb" style="background-image: url('https://img.youtube.com/vi/${v.id}/0.jpg');">
+         <button class="play-btn">▶</button>
+      </div>
+      <p class="video-title">${v.title}</p>
+    `;
+    card.addEventListener('click', () => {
+      openModal(`
+        <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+          <iframe src="https://www.youtube.com/embed/${v.id}?autoplay=1" 
+                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+        <h3 style="margin-top: 15px; text-transform: uppercase;">${v.title}</h3>
+      `);
+    });
+    container.appendChild(card);
+  });
+}
+
+// Init everything
+initHeroSlider();
+initAboutTabs();
+loadProducts();
+loadArticles();
+initGallery();
 
 const langSelector = document.getElementById('language-selector');
 if (langSelector) {
   langSelector.addEventListener('change', () => {
     setTimeout(() => {
-      updateWorkDescription();
       loadArticles();
       loadProducts();
     }, 50);
   });
 }
-
-initHeroSlider();
-initAboutTabs();
-loadProducts();
-loadContactInfo();
-loadWorkSettings();
-loadArticles();
