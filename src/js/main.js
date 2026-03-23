@@ -324,7 +324,10 @@ function updateWorkDescription() {
   const lang = localStorage.getItem('dxn_lang') || 'es';
   const descEl = document.getElementById('work-desc');
   const linkEl = document.getElementById('work-link');
-  if (descEl) descEl.textContent = workWithUsData[`desc_${lang}`] || workWithUsData.desc_es || '';
+  if (descEl) {
+    const raw = workWithUsData[`desc_${lang}`] || workWithUsData.desc_es || '';
+    descEl.innerHTML = raw.replace(/\n/g, '<br>');
+  }
   if (linkEl && workWithUsData.link) linkEl.href = workWithUsData.link;
 }
 
