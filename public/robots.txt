@@ -3,4 +3,4 @@ Allow: /
 Disallow: /login.html
 Disallow: /panel-z8x2k9m4.html
 
-Sitemap: /sitemap.xml
+Sitemap: https://saludyriquezafb.com/sitemap.xml
