@@ -1,0 +1,17 @@
+{
+  "name": "Salud y Riqueza | DXN",
+  "short_name": "DXN Salud",
+  "description": "Descubre los mejores productos DXN. Café con Ganoderma, suplementos y bienestar.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1a4d2e",
+  "icons": [
+    {
+      "src": "https://www.dxn2u.eu/images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

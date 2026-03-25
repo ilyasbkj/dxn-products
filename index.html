@@ -1,18 +1,60 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DXN Europe | Official Redesign</title>
+  <meta name="theme-color" content="#1a4d2e" />
+  <link rel="icon" type="image/png" href="https://www.dxn2u.eu/images/logo.png" />
+  <link rel="apple-touch-icon" href="https://www.dxn2u.eu/images/logo.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <title>Salud y Riqueza | DXN</title>
+  <meta name="description"
+    content="Descubre los mejores productos DXN. Especialistas en café con Ganoderma, suplementos y cuidado personal para mejorar tu salud y bienestar. Únete a nuestra red global." />
+  <meta name="keywords"
+    content="fouad, borni, fouad borni, borni fouad, fouad dxn, borni dxb, dxn, cafe, café dxn, ganoderma, salud, bienestar, suplementos dxn, dxn europa, dxn españa, productos dxn, suplementos alimenticios" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Salud y Riqueza | DXN" />
+  <meta property="og:description"
+    content="Descubre los mejores productos DXN. Especialistas en café con Ganoderma, suplementos alimenticios y cuidado personal." />
+  <meta property="og:image" content="https://www.dxn2u.eu/images/slider/Europe.jpg" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:title" content="Salud y Riqueza | DXN" />
+  <meta property="twitter:description"
+    content="Descubre los mejores productos DXN. Especialistas en café con Ganoderma, suplementos alimenticios y cuidado personal." />
+  <meta property="twitter:image" content="https://www.dxn2u.eu/images/slider/Europe.jpg" />
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Salud y Riqueza | DXN",
+    "description": "Descubre los mejores productos DXN. Especialistas en café con Ganoderma, suplementos alimenticios y cuidado personal para mejorar tu salud y bienestar.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "DXN",
+      "logo": "https://www.dxn2u.eu/images/logo.png"
+    }
+  }
+  </script>
 </head>
+
 <body>
-  
+
   <header class="navbar" id="navbar">
     <div class="brand">
-      <img src="https://www.dxn2u.eu/images/logo.png" alt="DXN Europe" onerror="this.src='https://via.placeholder.com/150x50?text=DXN+EUROPE'">
-      <img src="https://www.dxn2u.eu/images/eworld-logo.png" alt="eWorld" onerror="this.src='https://via.placeholder.com/150x50?text=eWorld'" style="height: 40px;">
+      <img src="https://www.dxn2u.eu/images/logo.png" alt="DXN Europa"
+        onerror="this.src='https://via.placeholder.com/150x50?text=DXN'">
+      <img src="https://www.dxn2u.eu/images/eworld-logo.png" alt="eWorld DXN Cafe"
+        onerror="this.src='https://via.placeholder.com/150x50?text=eWorld'" style="height: 40px;">
     </div>
-    
+
     <button class="mobile-menu-toggle" id="mobile-menu-toggle">
       <span></span>
       <span></span>
@@ -37,20 +79,33 @@
         <option value="fr">FR</option>
         <option value="ca">CA</option>
       </select>
-      
-      <a href="#" id="nav-admin-btn" class="hidden btn btn-outline" style="padding: 5px 15px; font-size: 0.7rem;" data-i18n="nav_admin">Admin</a>
-      <button id="nav-logout-btn" class="btn btn-outline hidden" style="padding: 5px 15px; font-size: 0.7rem;" data-i18n="nav_logout">Salir</button>
+
+      <a href="#" id="nav-admin-btn" class="hidden btn btn-outline" style="padding: 5px 15px; font-size: 0.7rem;"
+        data-i18n="nav_admin">Admin</a>
+      <button id="nav-logout-btn" class="btn btn-outline hidden" style="padding: 5px 15px; font-size: 0.7rem;"
+        data-i18n="nav_logout">Salir</button>
     </div>
   </header>
 
   <main>
+    <!-- Hidden SEO H1 -->
+    <h1
+      style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0;">
+      Mejores Productos DXN - Café con Ganoderma, Salud y Bienestar</h1>
+
     <!-- Hero Slider -->
     <section class="hero-section">
-      <div class="hero-badge-float" style="background: rgba(237, 28, 36, 0.9); border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">One World One Market</div>
+      <div class="hero-badge-float"
+        style="background: rgba(237, 28, 36, 0.9); border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">One
+        World One Market</div>
       <div class="hero-slider" id="hero-slider">
-        <div class="hero-slide active" style="background-image: url('https://www.dxn2u.eu/images/slider/Europe.jpg');"></div>
-        <div class="hero-slide" style="background-image: url('https://www.dxn2u.eu/images/slider/One-world-one-market.jpg');"></div>
-        <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1600&auto=format&fit=crop');"></div>
+        <div class="hero-slide active" style="background-image: url('https://www.dxn2u.eu/images/slider/Europe.jpg');">
+        </div>
+        <div class="hero-slide"
+          style="background-image: url('https://www.dxn2u.eu/images/slider/One-world-one-market.jpg');"></div>
+        <div class="hero-slide"
+          style="background-image: url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1600&auto=format&fit=crop');">
+        </div>
       </div>
     </section>
 
@@ -69,30 +124,40 @@
       <div class="container">
         <div class="about-layout">
           <div class="about-tabs">
-            <button class="about-tab active" data-tab="philosophy" data-i18n="about_tab_philosophy">Nuestra Filosofía</button>
+            <button class="about-tab active" data-tab="philosophy" data-i18n="about_tab_philosophy">Nuestra
+              Filosofía</button>
             <button class="about-tab" data-tab="history" data-i18n="about_tab_history">Nuestra Historia</button>
             <button class="about-tab" data-tab="founder" data-i18n="about_tab_founder">Nuestro Fundador</button>
           </div>
           <div class="about-content">
             <h2 class="section-title text-left" data-i18n="about_title">Sobre DXN</h2>
-            
+
             <div id="phi-content" class="about-tab-content active">
-               <p data-i18n="about_desc1">DXN es una empresa multinacional de salud y bienestar reconocida mundialmente por sus productos derivados del Ganoderma Lucidum, un hongo con siglos de historia en la medicina oriental. Nuestra filosofía se basa en "Un Mundo Un Mercado", ofreciendo salud y riqueza a todos.</p>
+              <p data-i18n="about_desc1">DXN es una empresa multinacional de salud y bienestar reconocida mundialmente
+                por sus productos derivados del Ganoderma Lucidum, un hongo con siglos de historia en la medicina
+                oriental. Nuestra filosofía se basa en "Un Mundo Un Mercado", ofreciendo salud y riqueza a todos.</p>
             </div>
             <div id="hist-content" class="about-tab-content">
-               <p data-i18n="about_history_text">Fundada en 1993 por el Dr. Lim Siow Jin, DXN ha crecido hasta convertirse en una de las empresas de venta directa más grandes del mundo, especializada en Ganoderma de alta calidad.</p>
+              <p data-i18n="about_history_text">Fundada en 1993 por el Dr. Lim Siow Jin, DXN ha crecido hasta
+                convertirse en una de las empresas de venta directa más grandes del mundo, especializada en Ganoderma de
+                alta calidad.</p>
             </div>
             <div id="fou-content" class="about-tab-content">
-               <p data-i18n="about_founder_text"><strong>Dr. Lim Siow Jin</strong> fundó DXN para combinar los beneficios de las hierbas tradicionales con la tecnología moderna y promover el bienestar global.</p>
+              <p data-i18n="about_founder_text"><strong>Dr. Lim Siow Jin</strong> fundó DXN para combinar los beneficios
+                de las hierbas tradicionales con la tecnología moderna y promover el bienestar global.</p>
             </div>
 
             <div class="stats-grid" style="margin-top: 30px;">
-              <div class="stat-item" style="flex: 1; text-align: center; padding: 20px; background: #fff; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-                <span class="stat-number" style="color: var(--accent-primary); font-size: 1.5rem; font-weight: 800;">180+</span>
+              <div class="stat-item"
+                style="flex: 1; text-align: center; padding: 20px; background: #fff; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                <span class="stat-number"
+                  style="color: var(--accent-primary); font-size: 1.5rem; font-weight: 800;">180+</span>
                 <p data-i18n="stat_countries" style="font-size: 0.8rem; font-weight: 600;">PAÍSES</p>
               </div>
-              <div class="stat-item" style="flex: 1; text-align: center; padding: 20px; background: #fff; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-top: 10px;">
-                <span class="stat-number" style="color: var(--accent-primary); font-size: 1.5rem; font-weight: 800;">15M+</span>
+              <div class="stat-item"
+                style="flex: 1; text-align: center; padding: 20px; background: #fff; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-top: 10px;">
+                <span class="stat-number"
+                  style="color: var(--accent-primary); font-size: 1.5rem; font-weight: 800;">15M+</span>
                 <p data-i18n="stat_distributors" style="font-size: 0.8rem; font-weight: 600;">MIEMBROS</p>
               </div>
             </div>
@@ -106,7 +171,7 @@
       <div class="container">
         <h2 class="section-title" data-i18n="hero_title">Nuestros Productos</h2>
         <div id="category-filter-container" class="category-filters-wrapper hidden">
-           <button class="btn btn-outline" id="back-to-categories">← Volver a categorías</button>
+          <button class="btn btn-outline" id="back-to-categories">← Volver a categorías</button>
         </div>
         <div class="products-grid" id="products-container">
           <!-- Categories/Products loaded via main.js -->
@@ -128,7 +193,8 @@
     <section id="work-with-us" class="section">
       <div class="container text-center">
         <h2 class="section-title" data-i18n="work_title">Oportunidad de Negocio</h2>
-        <p id="work-desc" class="m-bottom-20 max-width-800 m-auto" style="text-align: justify; line-height: 1.8;">¿Te gustaría ser parte de nuestra red global y crecer con nosotros?</p>
+        <p id="work-desc" class="m-bottom-20 max-width-800 m-auto" style="text-align: justify; line-height: 1.8;">¿Te
+          gustaría ser parte de nuestra red global y crecer con nosotros?</p>
         <a href="#" id="work-link" class="btn btn-primary" target="_blank" data-i18n="work_btn">ÚNETE AHORA</a>
       </div>
     </section>
@@ -137,10 +203,12 @@
     <section id="contact" class="section bg-light">
       <div class="container text-center">
         <h2 class="section-title" data-i18n="contact_title">Contáctanos</h2>
-        <p data-i18n="contact_desc" class="m-bottom-20">Estamos aquí para ayudarte a encontrar el producto ideal y resolver tus dudas.</p>
+        <p data-i18n="contact_desc" class="m-bottom-20">Estamos aquí para ayudarte a encontrar el producto ideal y
+          resolver tus dudas.</p>
         <div class="flex-center gap-20">
           <a href="#" id="footer-email-btn" class="btn btn-outline">✉ Email</a>
-          <a href="#" id="footer-wa-btn" class="btn btn-primary" target="_blank" data-i18n="contact_whatsapp">WhatsApp</a>
+          <a href="#" id="footer-wa-btn" class="btn btn-primary" target="_blank"
+            data-i18n="contact_whatsapp">WhatsApp</a>
         </div>
       </div>
     </section>
@@ -157,4 +225,5 @@
 
   <script type="module" src="/src/js/main.js"></script>
 </body>
+
 </html>
