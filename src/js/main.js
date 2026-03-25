@@ -145,6 +145,7 @@ async function loadProducts() {
 function renderCategories() {
   productsContainer.innerHTML = '';
   document.getElementById('category-filter-container').classList.add('hidden');
+  productsContainer.classList.add('categories-layout');
 
   const ci = window._categoryImages || {};
   const categories = [
@@ -155,7 +156,7 @@ function renderCategories() {
 
   categories.forEach(cat => {
     const card = document.createElement('div');
-    card.className = 'product-card cursor-pointer';
+    card.className = 'product-card category-card cursor-pointer';
     card.innerHTML = `
       <div class="product-image-container">
         <img src="${cat.img}" alt="${cat.id}" class="product-image" />
@@ -173,6 +174,7 @@ function renderCategories() {
 function renderProducts(category) {
   productsContainer.innerHTML = '';
   document.getElementById('category-filter-container').classList.remove('hidden');
+  productsContainer.classList.remove('categories-layout');
 
   const filtered = allProducts.filter(p => (p.category === category) || (!p.category && category === 'drinks'));
   
@@ -218,7 +220,7 @@ async function loadArticles() {
     querySnapshot.forEach((doc) => { articles.push({ id: doc.id, ...doc.data() }); });
 
     if (articles.length === 0) {
-      articlesContainer.innerHTML = '<p class="text-center" style="grid-column: 1/-1;">No hay noticias disponibles.</p>';
+      articlesContainer.innerHTML = '<p class="text-center" style="grid-column: 1/-1;">No hay artículos disponibles.</p>';
       return;
     }
 
@@ -285,15 +287,32 @@ async function loadGallery() {
 
   container.innerHTML = '';
   videos.forEach(v => {
-    const vid = extractYouTubeId(v.videoId) || extractYouTubeId(v.youtubeId) || v.videoId || '';
-    if (!vid) return; // skip invalid entries
     const card = document.createElement('div');
     card.className = 'video-card cursor-pointer';
+    
+    // Check if it's an image
+    if (v.imageUrl) {
+      card.innerHTML = `
+        <div class="video-thumb" style="background-image: url('${v.imageUrl}');"></div>
+        <p class="video-title">${v.title || ''}</p>
+      `;
+      card.addEventListener('click', () => {
+        openModal(`
+          <img src="${v.imageUrl}" style="width: 100%; border-radius: 4px; margin-bottom: 20px;" />
+          <h3 style="margin-top: 15px; text-transform: uppercase;">${v.title || ''}</h3>
+        `);
+      });
+      container.appendChild(card);
+      return;
+    }
+
+    const vid = extractYouTubeId(v.videoId) || extractYouTubeId(v.youtubeId) || v.videoId || '';
+    if (!vid) return; // skip invalid entries
     card.innerHTML = `
       <div class="video-thumb" style="background-image: url('https://img.youtube.com/vi/${vid}/0.jpg');">
          <button class="play-btn">▶</button>
       </div>
-      <p class="video-title">${v.title}</p>
+      <p class="video-title">${v.title || ''}</p>
     `;
     card.addEventListener('click', () => {
       openModal(`
@@ -302,7 +321,7 @@ async function loadGallery() {
                   style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
-        <h3 style="margin-top: 15px; text-transform: uppercase;">${v.title}</h3>
+        <h3 style="margin-top: 15px; text-transform: uppercase;">${v.title || ''}</h3>
       `);
     });
     container.appendChild(card);
@@ -366,6 +385,45 @@ loadArticles();
 loadGallery();
 loadContactInfo();
 loadWorkSettings();
+
+// Scrollspy Logic
+const sections = document.querySelectorAll('section');
+const navLinks = document.querySelectorAll('.nav-center a');
+
+if (sections.length > 0 && navLinks.length > 0) {
+  window.addEventListener('scroll', () => {
+    let current = '';
+    const scrollY = window.scrollY;
+
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.clientHeight;
+      if (scrollY >= (sectionTop - 200)) {
+        current = section.getAttribute('id');
+      }
+    });
+
+    if (scrollY < 200) {
+      current = 'home';
+    }
+
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      const href = link.getAttribute('href');
+      
+      if (
+        (current === 'home' && href === '/') ||
+        (href === `#${current}`) ||
+        (href === `/#${current}`)
+      ) {
+        link.classList.add('active');
+        link.style.color = 'var(--accent-primary)';
+      } else {
+        link.style.color = '';
+      }
+    });
+  });
+}
 
 const langSelector = document.getElementById('language-selector');
 if (langSelector) {
