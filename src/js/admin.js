@@ -423,7 +423,8 @@ if (btnShowVideoForm) {
     videoFormContainer.classList.remove('hidden');
     videoForm.reset();
     document.getElementById('vid-id').value = '';
-    videoFormTitle.textContent = 'Agregar Video';
+    document.getElementById('vid-image-url').value = '';
+    videoFormTitle.textContent = 'Agregar Elemento';
     window.scrollTo({ top: videoFormContainer.offsetTop, behavior: 'smooth' });
   });
 }
@@ -456,11 +457,13 @@ function renderGalleryTable() {
   }
   galleryTbody.innerHTML = '';
   galleryList.forEach(v => {
+    const thumb = v.imageUrl ? v.imageUrl : `https://img.youtube.com/vi/${v.videoId}/default.jpg`;
+    const displayId = v.imageUrl ? `<a href="${v.imageUrl}" target="_blank" style="color:var(--accent-primary)">Enlace Foto</a>` : v.videoId;
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td style="width: 120px"><img src="https://img.youtube.com/vi/${v.videoId}/default.jpg" style="width:100px; border-radius:4px" /></td>
+      <td style="width: 120px"><img src="${thumb}" style="width:100px; border-radius:4px" /></td>
       <td><strong>${v.title}</strong></td>
-      <td>${v.videoId}</td>
+      <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${displayId}</td>
       <td style="width: 180px">
         <button class="btn action-btn bg-gold" style="padding: 6px 12px; font-size: 0.8em; margin-right: 5px; background:var(--accent-gold); color:black; border-radius: 4px;" onclick="editVideo('${v.id}')">Editar</button>
         <button class="btn action-btn bg-danger" style="padding: 6px 12px; font-size: 0.8em; border-radius: 4px; border:none; background:var(--danger); color:white;" onclick="deleteVideo('${v.id}')">Eliminar</button>
@@ -473,10 +476,11 @@ function renderGalleryTable() {
 window.editVideo = (id) => {
   const v = galleryList.find(x => x.id === id);
   if (!v) return;
-  videoFormTitle.textContent = 'Editar Video';
+  videoFormTitle.textContent = 'Editar Elemento';
   document.getElementById('vid-id').value = v.id;
   document.getElementById('vid-title').value = v.title || '';
   document.getElementById('vid-youtube-id').value = v.videoId || '';
+  document.getElementById('vid-image-url').value = v.imageUrl || '';
   videoFormContainer.classList.remove('hidden');
   window.scrollTo({ top: videoFormContainer.offsetTop, behavior: 'smooth' });
 };
@@ -498,19 +502,33 @@ if (videoForm) {
     const btn = videoForm.querySelector('button[type="submit"]');
     btn.disabled = true;
     btn.textContent = 'Guardando...';
+    
     const id = document.getElementById('vid-id').value;
     const rawInput = document.getElementById('vid-youtube-id').value.trim();
-    const videoId = extractYouTubeId(rawInput);
-    if (!videoId) {
-      alert('No se pudo extraer el ID del video. Pega un enlace de YouTube o un ID válido.');
+    const imageUrl = document.getElementById('vid-image-url') ? document.getElementById('vid-image-url').value.trim() : '';
+
+    let videoId = null;
+    if (rawInput) {
+      videoId = extractYouTubeId(rawInput);
+      if (!videoId) {
+        alert('No se pudo extraer el ID del video. Pega un enlace de YouTube válido o déjalo vacío si es una foto.');
+        btn.disabled = false;
+        btn.textContent = 'Guardar Elemento';
+        return;
+      }
+    } else if (!imageUrl && !rawInput) {
+      alert('Debes ingresar al menos un enlace de YouTube o una URL de imagen.');
       btn.disabled = false;
-      btn.textContent = 'Guardar Video';
+      btn.textContent = 'Guardar Elemento';
       return;
     }
+
     const data = {
       title: document.getElementById('vid-title').value,
-      videoId: videoId
+      videoId: videoId || null,
+      imageUrl: imageUrl || null
     };
+
     try {
       if (id) {
         await updateDoc(doc(db, 'gallery', id), data);
@@ -522,10 +540,10 @@ if (videoForm) {
       await loadAdminGallery();
     } catch(e) {
       console.error(e);
-      alert('Error al guardar video.');
+      alert('Error al guardar elemento.');
     }
     btn.disabled = false;
-    btn.textContent = 'Guardar Video';
+    btn.textContent = 'Guardar Elemento';
   });
 }
 

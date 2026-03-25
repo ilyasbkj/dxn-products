@@ -239,8 +239,8 @@
       <!-- Gestión de Galería de Videos -->
       <section class="glass-card mb-8">
         <div class="admin-header">
-          <h2>Galería de Videos</h2>
-          <button id="btn-show-video-form" class="btn btn-primary">+ Nuevo Video</button>
+          <h2>Galería</h2>
+          <button id="btn-show-video-form" class="btn btn-primary">+ Nuevo Elemento</button>
         </div>
         <div class="table-responsive">
           <table>
@@ -248,7 +248,7 @@
               <tr>
                 <th>Miniatura</th>
                 <th>Título</th>
-                <th>YouTube ID</th>
+                <th>YouTube ID / Img</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -257,21 +257,25 @@
         </div>
       </section>
 
-      <!-- Formulario Video -->
+      <!-- Formulario Video / Foto -->
       <section id="video-form-container" class="glass-card hidden mb-8">
-        <h3 id="video-form-title" class="mb-4">Agregar Video</h3>
+        <h3 id="video-form-title" class="mb-4">Agregar a Galería</h3>
         <form id="video-form">
           <input type="hidden" id="vid-id" />
           <div class="form-group">
-            <label>Título del Video</label>
+            <label>Título</label>
             <input type="text" id="vid-title" class="form-control" required />
           </div>
           <div class="form-group">
-            <label>ID o enlace de YouTube (ej: https://youtube.com/watch?v=xxx o dQw4w9WgXcQ)</label>
-            <input type="text" id="vid-youtube-id" class="form-control" required placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ" />
+            <label>ID o enlace de YouTube (Dejar vacío si es foto)</label>
+            <input type="text" id="vid-youtube-id" class="form-control" placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ" />
+          </div>
+          <div class="form-group">
+            <label>URL de Imagen (Para subir foto, dejar YouTube vacío)</label>
+            <input type="url" id="vid-image-url" class="form-control" placeholder="https://ejemplo.com/mifoto.jpg" />
           </div>
           <div style="display: flex; gap: 15px;">
-            <button type="submit" class="btn btn-primary">Guardar Video</button>
+            <button type="submit" class="btn btn-primary">Guardar Elemento</button>
             <button type="button" id="btn-cancel-video" class="btn btn-danger" style="background: transparent; border: 1px solid var(--glass-border); color: white;">Cancelar</button>
           </div>
         </form>

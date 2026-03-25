@@ -33,7 +33,7 @@ const translations = {
     cat_hygiene: "Higiene personal",
     blog_title: "Artículos",
     nav_gallery: "Galería",
-    gallery_title: "Galería de Videos",
+    gallery_title: "Galería",
     about_founder_text: "<strong>Dr. Lim Siow Jin</strong> fundó DXN para combinar los beneficios de las hierbas tradicionales con la tecnología moderna y promover el bienestar global."
   },
   en: {
@@ -70,7 +70,7 @@ const translations = {
     cat_hygiene: "Personal Hygiene",
     blog_title: "Articles",
     nav_gallery: "Gallery",
-    gallery_title: "Video Gallery",
+    gallery_title: "Gallery",
     about_founder_text: "<strong>Dr. Lim Siow Jin</strong> founded DXN to combine the benefits of traditional herbs with modern technology and promote global wellness."
   },
   fr: {
@@ -107,7 +107,7 @@ const translations = {
     cat_hygiene: "Hygiène Personnelle",
     blog_title: "Articles",
     nav_gallery: "Galerie",
-    gallery_title: "Galerie Vidéo",
+    gallery_title: "Galerie",
     about_founder_text: "<strong>Dr. Lim Siow Jin</strong> a fondé DXN pour combiner les bienfaits des herbes traditionnelles avec la technologie moderne et promouvoir le bien-être mondial."
   },
   ca: {
@@ -144,7 +144,7 @@ const translations = {
     cat_hygiene: "Higiene Personal",
     blog_title: "Articles",
     nav_gallery: "Galeria",
-    gallery_title: "Galeria de Vídeos",
+    gallery_title: "Galeria",
     about_founder_text: "<strong>Dr. Lim Siow Jin</strong> va fundar DXN per combinar els beneficis de les herbes tradicionals amb la tecnologia moderna i promoure el benestar global."
   },
   ar: {
@@ -181,7 +181,7 @@ const translations = {
     cat_hygiene: "العناية الشخصية",
     blog_title: "مقالات",
     nav_gallery: "معرض",
-    gallery_title: "معرض الفيديو",
+    gallery_title: "معرض",
     about_founder_text: "<strong>الدكتور ليم سيو جين</strong> أسس DXN للجمع بين فوائد الأعشاب التقليدية والتكنولوجيا الحديثة وتعزيز الرفاهية العالمية."
   }
 };
